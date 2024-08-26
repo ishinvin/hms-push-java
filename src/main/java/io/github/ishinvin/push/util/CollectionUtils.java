@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.util;
 
 import java.util.Collection;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class CollectionUtils {
     public CollectionUtils() {
     }
-
+    
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }

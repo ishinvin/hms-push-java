@@ -13,29 +13,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class TokenMessage {
     @JSONField(name = "token")
-    private String token;
+    private final String token;
 
-    public String getToken() {
-        return token;
-    }
-
-    public TokenMessage(Builder builder){
+    public TokenMessage(Builder builder) {
         this.token = builder.token;
     }
 
     /**
      * builder
-     *
-     * @return
      */
     public static Builder builder() {
         return new Builder();
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public static class Builder {
@@ -46,7 +45,7 @@ public class TokenMessage {
             return this;
         }
 
-        public TokenMessage build(){
+        public TokenMessage build() {
             return new TokenMessage(this);
         }
     }

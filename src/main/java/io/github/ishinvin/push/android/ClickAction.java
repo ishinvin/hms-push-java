@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.android;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.util.ValidatorUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,7 +24,7 @@ public class ClickAction {
     private static final String PATTERN = "^https.*";
 
     @JSONField(name = "type")
-    private Integer type;
+    private final Integer type;
 
     @JSONField(name = "intent")
     private String intent;
@@ -51,7 +51,16 @@ public class ClickAction {
             case 4:
                 this.richResource = builder.richResource;
                 break;
+            default:
+                break;
         }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -59,14 +68,15 @@ public class ClickAction {
      */
     public void check() {
         boolean isTrue = this.type == 1 ||
-                this.type == 2 ||
-                this.type == 3 ||
-                this.type == 4;
+            this.type == 2 ||
+            this.type == 3 ||
+            this.type == 4;
         ValidatorUtils.checkArgument(isTrue, "click type should be one of 1: customize action, 2: open url, 3: open app, 4: open rich media");
 
         switch (this.type) {
             case 1:
-                ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.intent) || StringUtils.isNotEmpty(this.action), "intent or action is required when click type=1");
+                ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.intent) || StringUtils.isNotEmpty(this.action),
+                    "intent or action is required when click type=1");
                 break;
             case 2:
                 ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.url), "url is required when click type=2");
@@ -75,6 +85,8 @@ public class ClickAction {
             case 4:
                 ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.richResource), "richResource is required when click type=4");
                 ValidatorUtils.checkArgument(this.richResource.matches(PATTERN), "richResource must start with https");
+                break;
+            default:
                 break;
         }
     }
@@ -100,13 +112,6 @@ public class ClickAction {
 
     public String getAction() {
         return action;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

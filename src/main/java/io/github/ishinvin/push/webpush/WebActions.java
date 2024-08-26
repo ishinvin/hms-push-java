@@ -13,19 +13,33 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.webpush;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class WebActions {
     @JSONField(name = "action")
-    private String action;
+    private final String action;
 
     @JSONField(name = "icon")
-    private String icon;
+    private final String icon;
 
     @JSONField(name = "title")
-    private String title;
+    private final String title;
+    
+    public WebActions(Builder builder) {
+        this.action = builder.action;
+        this.icon = builder.icon;
+        this.title = builder.title;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public String getAction() {
         return action;
@@ -39,21 +53,8 @@ public class WebActions {
         return title;
     }
 
-    public void check(){
+    public void check() {
 
-    }
-
-    public WebActions(Builder builder) {
-        this.action = builder.action;
-        this.icon = builder.icon;
-        this.title = builder.title;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

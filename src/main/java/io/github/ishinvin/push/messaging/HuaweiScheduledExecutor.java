@@ -16,15 +16,15 @@
  *                  Huawei Technologies Co., Ltd.
  *
  */
+
 package io.github.ishinvin.push.messaging;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * A single-threaded scheduled executor implementation.
@@ -45,12 +45,12 @@ public class HuaweiScheduledExecutor extends ScheduledThreadPoolExecutor {
     }
 
     private static ThreadFactory decorateThreadFactory(
-            ThreadFactory threadFactory, String name, Thread.UncaughtExceptionHandler handler) {
+        ThreadFactory threadFactory, String name, Thread.UncaughtExceptionHandler handler) {
         checkArgument(!Strings.isNullOrEmpty(name));
         ThreadFactoryBuilder builder = new ThreadFactoryBuilder()
-                .setThreadFactory(threadFactory)
-                .setNameFormat(name)
-                .setDaemon(true);
+            .setThreadFactory(threadFactory)
+            .setNameFormat(name)
+            .setDaemon(true);
         if (handler != null) {
             builder.setUncaughtExceptionHandler(handler);
         }

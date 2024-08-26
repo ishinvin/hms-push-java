@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 
@@ -32,7 +33,6 @@ public interface HuaweiMessageClient {
      * @param message      message {@link Message}
      * @param validateOnly A boolean indicating whether to send message for test. or not.
      * @return {@link SendResponse}.
-     * @throws HuaweiMesssagingException
      */
     SendResponse send(Message message, boolean validateOnly, String accessToken) throws HuaweiMesssagingException;
 

@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.Locale;
 
@@ -50,9 +50,17 @@ public class Notification {
         this.image = builder.image;
     }
 
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public void check() {
         if (this.image != null) {
-            ValidatorUtils.checkArgument(this.image.toLowerCase(Locale.getDefault()).trim().startsWith("https"), "image's url should start with HTTPS");
+            ValidatorUtils.checkArgument(this.image.toLowerCase(Locale.getDefault()).trim().startsWith("https"),
+                "image's url should start with HTTPS");
         }
     }
 
@@ -78,15 +86,6 @@ public class Notification {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    /**
-     * builder
-     *
-     * @return
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**

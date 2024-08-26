@@ -13,15 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.model;
 
 public enum Urgency {
     HIGH("HIGH"),
     NORMAL("NORMAL");
 
-    private String value;
+    private final String value;
 
-    private Urgency(String value) {
+    Urgency(String value) {
         this.value = value;
     }
 

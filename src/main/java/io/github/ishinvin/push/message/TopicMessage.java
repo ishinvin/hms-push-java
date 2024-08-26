@@ -13,35 +13,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TopicMessage {
     @JSONField(name = "topic")
-    private String topic;
-
+    private final String topic;
+    @JSONField(name = "token")
+    private final String token;
     @JSONField(name = "tokenArray")
     private List<String> tokenArray = new ArrayList<String>();
-
-    @JSONField(name = "token")
-    private String token;
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public List<String> getTokenArray() {
-        return tokenArray;
-    }
-
-    public String getToken() {
-        return token;
-    }
 
     private TopicMessage(Builder builder) {
         this.topic = builder.topic;
@@ -55,16 +41,26 @@ public class TopicMessage {
 
     /**
      * builder
-     *
-     * @return
      */
     public static Builder builder() {
         return new Builder();
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public List<String> getTokenArray() {
+        return tokenArray;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
     public static class Builder {
+        private final List<String> tokenArray = new ArrayList<String>();
         private String topic;
-        private List<String> tokenArray = new ArrayList<String>();
         private String token;
 
         public Builder setTopic(String topic) {

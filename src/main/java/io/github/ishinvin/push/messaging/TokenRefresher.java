@@ -16,14 +16,14 @@
  *                  Huawei Technologies Co., Ltd.
  *
  */
+
 package io.github.ishinvin.push.messaging;
 
 import io.github.ishinvin.push.util.ValidatorUtils;
+import java.util.concurrent.Future;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.Future;
 
 /**
  * Utility class for scheduling proactive token refresh events. Each HuaweiApp should have
@@ -35,8 +35,8 @@ import java.util.concurrent.Future;
 public class TokenRefresher {
     private static final Logger logger = LoggerFactory.getLogger(TokenRefresher.class);
 
-    private HuaweiApp app;
-    private HuaweiCredential credential;
+    private final HuaweiApp app;
+    private final HuaweiCredential credential;
 
     private Future future;
 
@@ -62,7 +62,7 @@ public class TokenRefresher {
      */
     public void scheduleRefresh(final long period) {
         cancelPrevious();
-        scheduleNext(() -> credential.refreshToken(), period, period);
+        scheduleNext(credential::refreshToken, period, period);
     }
 
     private void cancelPrevious() {

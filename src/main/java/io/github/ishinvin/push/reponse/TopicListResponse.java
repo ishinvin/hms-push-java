@@ -13,16 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.reponse;
 
 import com.alibaba.fastjson.JSONArray;
 
 public class TopicListResponse extends SendResponse {
     private final JSONArray topics;
-
-    public JSONArray getTopics() {
-        return topics;
-    }
 
     private TopicListResponse(String code, String msg, String requestId, JSONArray topics) {
         super(code, msg, requestId);
@@ -31,5 +28,9 @@ public class TopicListResponse extends SendResponse {
 
     public static TopicListResponse fromCode(String code, String msg, String requestId, JSONArray topics) {
         return new TopicListResponse(code, msg, requestId, topics);
+    }
+
+    public JSONArray getTopics() {
+        return topics;
     }
 }

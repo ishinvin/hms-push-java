@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.apns;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -28,22 +29,38 @@ public class ApnsHeaders {
     private static final int SEND_BY_GROUP = 5;
 
     @JSONField(name = "authorization")
-    private String authorization;
+    private final String authorization;
 
     @JSONField(name = "apns-id")
-    private String apnsId;
+    private final String apnsId;
 
     @JSONField(name = "apns-expiration")
-    private Long apnsExpiration;
+    private final Long apnsExpiration;
 
     @JSONField(name = "apns-priority")
-    private String apnsPriority;
+    private final String apnsPriority;
 
     @JSONField(name = "apns-topic")
-    private String apnsTopic;
+    private final String apnsTopic;
 
     @JSONField(name = "apns-collapse-id")
-    private String apnsCollapseId;
+    private final String apnsCollapseId;
+
+    private ApnsHeaders(Builder builder) {
+        this.authorization = builder.authorization;
+        this.apnsId = builder.apnsId;
+        this.apnsExpiration = builder.apnsExpiration;
+        this.apnsPriority = builder.apnsPriority;
+        this.apnsTopic = builder.apnsTopic;
+        this.apnsCollapseId = builder.apnsCollapseId;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public String getAuthorization() {
         return authorization;
@@ -78,27 +95,11 @@ public class ApnsHeaders {
         }
         if (this.apnsPriority != null) {
             ValidatorUtils.checkArgument(Integer.parseInt(this.apnsPriority) == SEND_BY_GROUP ||
-                    Integer.parseInt(this.apnsPriority) == SEND_IMMEDIATELY, "apns-priority should be SEND_BY_GROUP:5  or SEND_IMMEDIATELY:10");
+                Integer.parseInt(this.apnsPriority) == SEND_IMMEDIATELY, "apns-priority should be SEND_BY_GROUP:5  or SEND_IMMEDIATELY:10");
         }
         if (this.apnsCollapseId != null) {
             ValidatorUtils.checkArgument(this.apnsCollapseId.getBytes().length < 64, "Number of apnsCollapseId bytes should be less than 64");
         }
-    }
-
-    private ApnsHeaders(Builder builder) {
-        this.authorization = builder.authorization;
-        this.apnsId = builder.apnsId;
-        this.apnsExpiration = builder.apnsExpiration;
-        this.apnsPriority = builder.apnsPriority;
-        this.apnsTopic = builder.apnsTopic;
-        this.apnsCollapseId = builder.apnsCollapseId;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

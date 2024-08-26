@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 import com.alibaba.fastjson.JSON;
@@ -26,6 +27,11 @@ import io.github.ishinvin.push.reponse.SendResponse;
 import io.github.ishinvin.push.reponse.TopicListResponse;
 import io.github.ishinvin.push.reponse.TopicSendResponse;
 import io.github.ishinvin.push.util.ValidatorUtils;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,20 +40,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     private static final String PUSH_URL = ResourceBundle.getBundle("url").getString("push_open_url");
 
     private final String HcmPushUrl;
+    private final CloseableHttpClient httpClient;
     private String hcmTopicUrl;
     private String hcmGroupUrl;
     private String hcmTokenUrl;
-    private final CloseableHttpClient httpClient;
 
     private HuaweiMessageClientImpl(Builder builder) {
         this.HcmPushUrl = MessageFormat.format(PUSH_URL + "/v1/{0}/messages:send", builder.appId);
@@ -55,6 +55,18 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
 
         ValidatorUtils.checkArgument(builder.httpClient != null, "requestFactory must not be null");
         this.httpClient = builder.httpClient;
+    }
+
+    static HuaweiMessageClientImpl fromApp(HuaweiApp app) {
+        String appId = ImplHuaweiTrampolines.getAppId(app);
+        return HuaweiMessageClientImpl.builder()
+            .setAppId(appId)
+            .setHttpClient(app.getOption().getHttpClient())
+            .build();
+    }
+
+    static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -125,17 +137,17 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     /**
      * send request
      *
-     * @param message     message {@link Message}
+     * @param message      message {@link Message}
      * @param validateOnly A boolean indicating whether to send message for test or not.
      * @param accessToken  A String for oauth
      * @return {@link SendResponse}
-     * @throws IOException If a error occurs when sending request
+     * @throws IOException If an error occurs when sending request
      */
     private SendResponse sendRequest(Message message, boolean validateOnly, String accessToken) throws IOException, HuaweiMesssagingException {
         Map<String, Object> map = createRequestMap(message, validateOnly);
         HttpPost httpPost = new HttpPost(this.HcmPushUrl);
         StringEntity entity = new StringEntity(JSON.toJSONString(map), "UTF-8");
-//        String aqa = JSON.toJSONString(map);
+        /* String aqa = JSON.toJSONString(map); */
         httpPost.setHeader("Authorization", "Bearer " + accessToken);
         httpPost.setHeader("Content-Type", "application/json;charset=utf-8");
         httpPost.setEntity(entity);
@@ -177,18 +189,6 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     private HuaweiMesssagingException createExceptionFromResponse(HttpResponseException e) {
         String msg = MessageFormat.format("Unexpected HTTP response with status : {0}, body : {1}", e.getStatusCode(), e.getMessage());
         return new HuaweiMesssagingException(HuaweiMessaging.UNKNOWN_ERROR, msg, e);
-    }
-
-    static HuaweiMessageClientImpl fromApp(HuaweiApp app) {
-        String appId = ImplHuaweiTrampolines.getAppId(app);
-        return HuaweiMessageClientImpl.builder()
-                .setAppId(appId)
-                .setHttpClient(app.getOption().getHttpClient())
-                .build();
-    }
-
-    static Builder builder() {
-        return new Builder();
     }
 
     static final class Builder {

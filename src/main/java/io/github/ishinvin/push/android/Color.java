@@ -13,33 +13,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.android;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class Color {
-    private final float zero = -0.000001f;
-
-    private final float one = 1.000001f;
 
     @JSONField(name = "alpha")
-    private Float alpha = new Float(1.0);
+    private final Float alpha;
 
     @JSONField(name = "red")
-    private Float red = new Float(0.0);
+    private final Float red;
 
     @JSONField(name = "green")
-    private Float green = new Float(0.0);
+    private final Float green;
 
     @JSONField(name = "blue")
-    private Float blue = new Float(0.0);
+    private final Float blue;
 
     public Color(Builder builder) {
         this.alpha = builder.alpha;
         this.red = builder.red;
         this.green = builder.green;
         this.blue = builder.blue;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public double getAlpha() {
@@ -59,24 +64,19 @@ public class Color {
     }
 
     public void check() {
+        float zero = -0.000001f;
+        float one = 1.000001f;
         ValidatorUtils.checkArgument(this.alpha > zero && this.alpha < one, "Alpha shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.red > zero && this.red < one, "Red shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.green > zero && this.green < one, "Green shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.blue > zero && this.blue < one, "Blue shoube locate between [0,1]");
     }
 
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
-        private Float alpha = new Float(1.0);
-        private Float red = new Float(0.0);
-        private Float green = new Float(0.0);
-        private Float blue = new Float(0.0);
+        private Float alpha = 1.0f;
+        private Float red = 0.0f;
+        private Float green = 0.0f;
+        private Float blue = 0.0f;
 
         public Builder setAlpha(Float alpha) {
             this.alpha = alpha;

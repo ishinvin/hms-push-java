@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.webpush;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.util.CollectionUtils;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.ArrayList;
@@ -24,49 +24,76 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WebNotification {
-    private static String[] DIR_VALUE = {"auto", "ltr", "rtl"};
+    private static final String[] DIR_VALUE = {"auto", "ltr", "rtl"};
 
     @JSONField(name = "title")
-    private String title;
+    private final String title;
 
     @JSONField(name = "body")
-    private String body;
+    private final String body;
 
     @JSONField(name = "icon")
-    private String icon;
+    private final String icon;
 
     @JSONField(name = "image")
-    private String image;
+    private final String image;
 
     @JSONField(name = "lang")
-    private String lang;
+    private final String lang;
 
     @JSONField(name = "tag")
-    private String tag;
+    private final String tag;
 
     @JSONField(name = "badge")
-    private String badge;
+    private final String badge;
 
     @JSONField(name = "dir")
-    private String dir;
-
+    private final String dir;
+    @JSONField(name = "renotify")
+    private final boolean renotify;
+    @JSONField(name = "require_interaction")
+    private final boolean requireInteraction;
+    @JSONField(name = "silent")
+    private final boolean silent;
+    @JSONField(name = "timestamp")
+    private final Long timestamp;
     @JSONField(name = "vibrate")
     private List<Integer> vibrate = new ArrayList<>();
-
-    @JSONField(name = "renotify")
-    private boolean renotify;
-
-    @JSONField(name = "require_interaction")
-    private boolean requireInteraction;
-
-    @JSONField(name = "silent")
-    private boolean silent;
-
-    @JSONField(name = "timestamp")
-    private Long timestamp;
-
     @JSONField(name = "actions")
     private List<WebActions> actions = new ArrayList<WebActions>();
+
+    public WebNotification(Builder builder) {
+        this.title = builder.title;
+        this.body = builder.body;
+        this.icon = builder.icon;
+        this.image = builder.image;
+        this.lang = builder.lang;
+        this.tag = builder.tag;
+        this.badge = builder.badge;
+        this.dir = builder.dir;
+        if (!CollectionUtils.isEmpty(builder.vibrate)) {
+            this.vibrate.addAll(builder.vibrate);
+        } else {
+            this.vibrate = null;
+        }
+
+        this.renotify = builder.renotify;
+        this.requireInteraction = builder.requireInteraction;
+        this.silent = builder.silent;
+        this.timestamp = builder.timestamp;
+        if (!CollectionUtils.isEmpty(builder.actions)) {
+            this.actions.addAll(builder.actions);
+        } else {
+            this.actions = null;
+        }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public String getTitle() {
         return title;
@@ -126,7 +153,7 @@ public class WebNotification {
 
     public void check() {
         if (this.dir != null) {
-            ValidatorUtils.checkArgument(Arrays.stream(DIR_VALUE).anyMatch(value -> value.equals(dir)), "Invalid dir");
+            ValidatorUtils.checkArgument(Arrays.asList(DIR_VALUE).contains(dir), "Invalid dir");
         }
         if (this.vibrate != null) {
             for (Object obj : vibrate) {
@@ -135,40 +162,9 @@ public class WebNotification {
         }
     }
 
-    public WebNotification(Builder builder) {
-        this.title = builder.title;
-        this.body = builder.body;
-        this.icon = builder.icon;
-        this.image = builder.image;
-        this.lang = builder.lang;
-        this.tag = builder.tag;
-        this.badge = builder.badge;
-        this.dir = builder.dir;
-        if (!CollectionUtils.isEmpty(builder.vibrate)) {
-            this.vibrate.addAll(builder.vibrate);
-        } else {
-            this.vibrate = null;
-        }
-
-        this.renotify = builder.renotify;
-        this.requireInteraction = builder.requireInteraction;
-        this.silent = builder.silent;
-        this.timestamp = builder.timestamp;
-        if (!CollectionUtils.isEmpty(builder.actions)) {
-            this.actions.addAll(builder.actions);
-        } else {
-            this.actions = null;
-        }
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
+        private final List<Integer> vibrate = new ArrayList<>();
+        private final List<WebActions> actions = new ArrayList<WebActions>();
         private String title;
         private String body;
         private String icon;
@@ -177,12 +173,10 @@ public class WebNotification {
         private String tag;
         private String badge;
         private String dir;
-        private List<Integer> vibrate = new ArrayList<>();
         private boolean renotify;
         private boolean requireInteraction;
         private boolean silent;
         private Long timestamp;
-        private List<WebActions> actions = new ArrayList<WebActions>();
 
         public Builder setTitle(String title) {
             this.title = title;

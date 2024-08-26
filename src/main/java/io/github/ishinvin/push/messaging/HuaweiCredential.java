@@ -13,10 +13,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 import com.alibaba.fastjson.JSONObject;
-
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -25,12 +30,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Accept the appId and appSecret given by the user and build the credential
@@ -41,13 +40,12 @@ public class HuaweiCredential {
 
     private final String PUSH_AT_URL = ResourceBundle.getBundle("url").getString("token_server");
 
-    private String appId;
-    private String appSecret;
-
+    private final String appId;
+    private final String appSecret;
+    private final Lock lock;
+    private final CloseableHttpClient httpClient;
     private String accessToken;
     private long expireIn;
-    private Lock lock;
-    private CloseableHttpClient httpClient;
 
     private HuaweiCredential(Builder builder) {
         this.lock = new ReentrantLock();
@@ -58,6 +56,13 @@ public class HuaweiCredential {
         } else {
             this.httpClient = builder.httpClient;
         }
+    }
+
+    /**
+     * Builder for constructing {@link HuaweiCredential}.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -129,13 +134,6 @@ public class HuaweiCredential {
 
     public String getAppId() {
         return appId;
-    }
-
-    /**
-     * Builder for constructing {@link HuaweiCredential}.
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

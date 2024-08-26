@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.reponse;
 
 import com.alibaba.fastjson.JSONArray;
@@ -21,6 +22,18 @@ public final class TopicSendResponse extends SendResponse {
     private final Integer failureCount;
     private final Integer successCount;
     private final JSONArray errors;
+
+    private TopicSendResponse(String code, String msg, String requestId, Integer failureCount, Integer successCount, JSONArray errors) {
+        super(code, msg, requestId);
+        this.failureCount = failureCount;
+        this.successCount = successCount;
+        this.errors = errors;
+    }
+
+    public static TopicSendResponse fromCode(String code, String msg, String requestId, Integer failureCount, Integer successCount,
+                                             JSONArray errors) {
+        return new TopicSendResponse(code, msg, requestId, failureCount, successCount, errors);
+    }
 
     public Integer getFailureCount() {
         return failureCount;
@@ -32,16 +45,5 @@ public final class TopicSendResponse extends SendResponse {
 
     public JSONArray getErrors() {
         return errors;
-    }
-
-    private TopicSendResponse(String code, String msg, String requestId, Integer failureCount, Integer successCount, JSONArray errors) {
-        super(code,msg,requestId);
-        this.failureCount = failureCount;
-        this.successCount = successCount;
-        this.errors = errors;
-    }
-
-    public static TopicSendResponse fromCode(String code, String msg, String requestId,Integer failureCount,Integer successCount,JSONArray errors ) {
-        return new TopicSendResponse(code, msg, requestId,failureCount,successCount,errors);
     }
 }

@@ -13,18 +13,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 import io.github.ishinvin.push.util.IgnoreSSLUtils;
 import io.github.ishinvin.push.util.ValidatorUtils;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
-/** Configurable HCM options. */
+/**
+ * Configurable HCM options.
+ */
 public class HuaweiOption {
     private static final Logger logger = LoggerFactory.getLogger(HuaweiOption.class);
 
@@ -44,6 +46,13 @@ public class HuaweiOption {
     }
 
     /**
+     * Builder for constructing {@link HuaweiOption}.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Returns a instance of HuaweiCredential used for refreshing token.
      *
      * @return A <code>HuaweiCredential</code> instance.
@@ -53,7 +62,7 @@ public class HuaweiOption {
     }
 
     /**
-     * Returns a instance of httpclient used for sending http request.
+     * Returns an instance of httpclient used for sending http request.
      *
      * @return A <code>httpclient</code> instance.
      */
@@ -65,16 +74,10 @@ public class HuaweiOption {
         return threadManager;
     }
 
-    /**
-     * Builder for constructing {@link HuaweiOption}.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static final class Builder {
         private HuaweiCredential credential;
         private CloseableHttpClient httpClient;
+        private ThreadManager threadManager = HuaweiThreadManager.DEFAULT_THREAD_MANAGER;
 
         {
             try {
@@ -84,10 +87,9 @@ public class HuaweiOption {
             }
         }
 
-        private ThreadManager threadManager = HuaweiThreadManager.DEFAULT_THREAD_MANAGER;
 
-
-        public Builder() {}
+        public Builder() {
+        }
 
         public Builder setCredential(HuaweiCredential credential) {
             this.credential = credential;

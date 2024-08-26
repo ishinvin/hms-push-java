@@ -13,11 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-
 import io.github.ishinvin.push.exception.HuaweiMesssagingException;
 import io.github.ishinvin.push.message.Message;
 import io.github.ishinvin.push.message.TopicMessage;
@@ -30,18 +30,18 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is the entrance for all server-side HCM actions.
  *
- * <p>You can get a instance of {@link io.github.ishinvin.push.messaging.HuaweiMessaging}
- * by a instance of {@link io.github.ishinvin.push.messaging.HuaweiApp}, and then use it to send a message
+ * <p>You can get an instance of {@link io.github.ishinvin.push.messaging.HuaweiMessaging}
+ * by an instance of {@link io.github.ishinvin.push.messaging.HuaweiApp}, and then use it to send a message
  */
 public class HuaweiMessaging {
-    private static final Logger logger = LoggerFactory.getLogger(HuaweiMessaging.class);
-
     static final String INTERNAL_ERROR = "internal error";
-
     static final String UNKNOWN_ERROR = "unknown error";
-
     static final String KNOWN_ERROR = "known error";
-
+    private static final Logger logger = LoggerFactory.getLogger(HuaweiMessaging.class);
+    /**
+     * HuaweiMessagingService
+     */
+    private static final String SERVICE_ID = HuaweiMessaging.class.getName();
     private final HuaweiApp app;
     private final Supplier<? extends HuaweiMessageClient> messagingClient;
 
@@ -65,9 +65,16 @@ public class HuaweiMessaging {
 
     private static HuaweiMessaging fromApp(final HuaweiApp app) {
         return HuaweiMessaging.builder()
-                .setApp(app)
-                .setMessagingClient(() -> HuaweiMessageClientImpl.fromApp(app))
-                .build();
+            .setApp(app)
+            .setMessagingClient(() -> HuaweiMessageClientImpl.fromApp(app))
+            .build();
+    }
+
+    /**
+     * Builder for constructing {@link HuaweiMessaging}.
+     */
+    static Builder builder() {
+        return new Builder();
     }
 
     HuaweiMessageClient getMessagingClient() {
@@ -87,37 +94,6 @@ public class HuaweiMessaging {
     }
 
     /**
-     * @param topicMessage topicmessage
-     * @return topic subscribe response
-     * @throws HuaweiMesssagingException
-     */
-    public SendResponse subscribeTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
-        final HuaweiMessageClient messagingClient = getMessagingClient();
-        return messagingClient.send(topicMessage, TopicOperation.SUBSCRIBE.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
-    }
-
-    /**
-     * @param topicMessage topic Message
-     * @return topic unsubscribe response
-     * @throws HuaweiMesssagingException
-     */
-    public SendResponse unsubscribeTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
-        final HuaweiMessageClient messagingClient = getMessagingClient();
-        return messagingClient.send(topicMessage, TopicOperation.UNSUBSCRIBE.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
-    }
-
-    /**
-     * @param topicMessage topic Message
-     * @return topic list
-     * @throws HuaweiMesssagingException
-     */
-    public SendResponse listTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
-        final HuaweiMessageClient messagingClient = getMessagingClient();
-        return messagingClient.send(topicMessage, TopicOperation.LIST.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
-    }
-
-
-    /**
      * Sends message {@link Message}
      *
      * <p>If the {@code validateOnly} option is set to true, the message will not be actually sent. Instead
@@ -135,9 +111,32 @@ public class HuaweiMessaging {
     }
 
     /**
-     * HuaweiMessagingService
+     * @param topicMessage topicmessage
+     * @return topic subscribe response
      */
-    private static final String SERVICE_ID = HuaweiMessaging.class.getName();
+    public SendResponse subscribeTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
+        final HuaweiMessageClient messagingClient = getMessagingClient();
+        return messagingClient.send(topicMessage, TopicOperation.SUBSCRIBE.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
+    }
+
+    /**
+     * @param topicMessage topic Message
+     * @return topic unsubscribe response
+     */
+    public SendResponse unsubscribeTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
+        final HuaweiMessageClient messagingClient = getMessagingClient();
+        return messagingClient.send(topicMessage, TopicOperation.UNSUBSCRIBE.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
+    }
+
+    /**
+     * @param topicMessage topic Message
+     * @return topic list
+     */
+    public SendResponse listTopic(TopicMessage topicMessage) throws HuaweiMesssagingException {
+        final HuaweiMessageClient messagingClient = getMessagingClient();
+        return messagingClient.send(topicMessage, TopicOperation.LIST.getValue(), ImplHuaweiTrampolines.getAccessToken(app));
+    }
+
 
     private static class HuaweiMessagingService extends HuaweiService<HuaweiMessaging> {
 
@@ -149,13 +148,6 @@ public class HuaweiMessaging {
         public void destroy() {
 
         }
-    }
-
-    /**
-     * Builder for constructing {@link HuaweiMessaging}.
-     */
-    static Builder builder() {
-        return new Builder();
     }
 
     static class Builder {

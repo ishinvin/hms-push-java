@@ -19,6 +19,7 @@
  *                  Huawei Technologies Co., Ltd.
  *
  */
+
 package io.github.ishinvin.push.messaging;
 
 import io.github.ishinvin.push.util.ValidatorUtils;
@@ -52,7 +53,6 @@ public abstract class ThreadManager {
      * This method is invoked when an app is deleted.
      *
      * @param app A {@link HuaweiApp} instance.
-     * @return A non-null <code>ExecutorService</code> instance.
      */
     protected abstract void releaseExecutor(HuaweiApp app, ExecutorService executor);
 
@@ -70,7 +70,7 @@ public abstract class ThreadManager {
     protected abstract ThreadFactory getThreadFactory();
 
     static final class HuaweiExecutors {
-        private ExecutorService userExecutor;
+        private final ExecutorService userExecutor;
 
         private HuaweiExecutors(ExecutorService userExecutor) {
             ValidatorUtils.checkArgument(userExecutor != null, "ExecutorService must not be null");

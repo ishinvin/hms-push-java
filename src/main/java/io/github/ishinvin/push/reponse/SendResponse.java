@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.reponse;
 
 /**
@@ -23,11 +24,14 @@ public class SendResponse {
     private final String msg;
     private final String requestId;
 
-
     protected SendResponse(String coede, String msg, String requestId) {
         this.code = coede;
         this.msg = msg;
         this.requestId = requestId;
+    }
+
+    public static SendResponse fromCode(String coede, String msg, String requestId) {
+        return new SendResponse(coede, msg, requestId);
     }
 
     public String getCode() {
@@ -40,9 +44,5 @@ public class SendResponse {
 
     public String getRequestId() {
         return requestId;
-    }
-
-    public static SendResponse fromCode(String coede, String msg, String requestId) {
-        return new SendResponse(coede, msg, requestId);
     }
 }

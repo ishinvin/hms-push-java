@@ -13,26 +13,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.webpush;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.util.ValidatorUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 
 public class WebHmsOptions {
     @JSONField(name = "link")
-    private String link;
-
-    public String getLink() {
-        return link;
-    }
+    private final String link;
 
     public WebHmsOptions(Builder builder) {
         this.link = builder.link;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public String getLink() {
+        return link;
     }
 
     public void check() {
@@ -43,13 +49,6 @@ public class WebHmsOptions {
                 ValidatorUtils.checkArgument(false, "Invalid link");
             }
         }
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

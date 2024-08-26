@@ -16,6 +16,7 @@
  *                  Huawei Technologies Co., Ltd.
  *
  */
+
 package io.github.ishinvin.push.messaging;
 
 import java.util.HashSet;
@@ -24,8 +25,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-
-/** Default ThreadManager implementations used by the HCM SDK */
+/**
+ * Default ThreadManager implementations used by the HCM SDK
+ */
 public class HuaweiThreadManager {
 
     public static final ThreadManager DEFAULT_THREAD_MANAGER = new DefaultThreadManager();

@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.apns;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -24,23 +25,10 @@ public class ApnsHmsOptions {
     private static final int VOIP_USER = 3;
 
     @JSONField(name = "target_user_type")
-    private Integer targetUserType;
+    private final Integer targetUserType;
 
-    public Integer getTargetUserType() {
-        return targetUserType;
-    }
-
-    private ApnsHmsOptions(Builder builder){
+    private ApnsHmsOptions(Builder builder) {
         this.targetUserType = builder.targetUserType;
-    }
-
-    public void check(){
-        if (targetUserType != null) {
-            ValidatorUtils.checkArgument(this.targetUserType.intValue() == TEST_USER
-                            || this.targetUserType.intValue() == FORMAL_USER
-                            || this.targetUserType.intValue() == VOIP_USER,
-                    "targetUserType should be [TEST_USER: 1, FORMAL_USER: 2, VOIP_USER: 3]");
-        }
     }
 
     /**
@@ -48,6 +36,19 @@ public class ApnsHmsOptions {
      */
     public static Builder builder() {
         return new Builder();
+    }
+
+    public Integer getTargetUserType() {
+        return targetUserType;
+    }
+
+    public void check() {
+        if (targetUserType != null) {
+            ValidatorUtils.checkArgument(this.targetUserType == TEST_USER
+                    || this.targetUserType == FORMAL_USER
+                    || this.targetUserType == VOIP_USER,
+                "targetUserType should be [TEST_USER: 1, FORMAL_USER: 2, VOIP_USER: 3]");
+        }
     }
 
     public static class Builder {
@@ -58,7 +59,7 @@ public class ApnsHmsOptions {
             return this;
         }
 
-        public ApnsHmsOptions build(){
+        public ApnsHmsOptions build() {
             return new ApnsHmsOptions(this);
         }
     }

@@ -16,19 +16,34 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Button {
     @JSONField(name = "name")
-    private String name;
+    private final String name;
 
     @JSONField(name = "action_type")
-    private Integer actionType;
+    private final Integer actionType;
 
     @JSONField(name = "intent_type")
-    private Integer intentType;
+    private final Integer intentType;
 
     @JSONField(name = "intent")
-    private String intent;
+    private final String intent;
 
     @JSONField(name = "data")
-    private String data;
+    private final String data;
+
+    public Button(Builder builder) {
+        this.name = builder.name;
+        this.actionType = builder.actionType;
+        this.intentType = builder.intentType;
+        this.intent = builder.intent;
+        this.data = builder.data;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public String getName() {
         return name;
@@ -50,26 +65,10 @@ public class Button {
         return data;
     }
 
-
-    public Button(Builder builder) {
-        this.name = builder.name;
-        this.actionType = builder.actionType;
-        this.intentType = builder.intentType;
-        this.intent = builder.intent;
-        this.data = builder.data;
-    }
-
     public void check() {
         if (this.actionType != null && this.actionType == 4) {
             ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.data), "data is needed when actionType is 4");
         }
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

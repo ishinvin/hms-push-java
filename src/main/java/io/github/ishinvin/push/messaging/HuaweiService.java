@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.messaging;
 
 /**
@@ -20,7 +21,7 @@ package io.github.ishinvin.push.messaging;
  * Each instance of the class is associated with one instance of the HuaweiApp
  */
 public abstract class HuaweiService<T> {
-    private String id;
+    private final String id;
     protected T instance;
 
     protected HuaweiService(String id, T instance) {

@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.model;
 
 public enum Visibility {
@@ -20,10 +21,10 @@ public enum Visibility {
     PRIVATE("PRIVATE"),
     PUBLIC("PUBLIC"),
     SECRET("SECRET");
+    
+    private final String value;
 
-    private String value;
-
-    private Visibility(String value) {
+    Visibility(String value) {
         this.value = value;
     }
 

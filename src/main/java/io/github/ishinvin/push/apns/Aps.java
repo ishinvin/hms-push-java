@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.apns;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -20,22 +21,35 @@ import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class Aps {
     @JSONField(name = "alert")
-    private Object alert;
+    private final Object alert;
 
     @JSONField(name = "badge")
-    private Integer badge;
+    private final Integer badge;
 
     @JSONField(name = "sound")
-    private String sound;
+    private final String sound;
 
     @JSONField(name = "content-available")
-    private Integer contentAvailable;
+    private final Integer contentAvailable;
 
     @JSONField(name = "category")
-    private String category;
+    private final String category;
 
     @JSONField(name = "thread-id")
-    private String threadId;
+    private final String threadId;
+
+    private Aps(Builder builder) {
+        this.alert = builder.alert;
+        this.badge = builder.badge;
+        this.sound = builder.sound;
+        this.contentAvailable = builder.contentAvailable;
+        this.category = builder.category;
+        this.threadId = builder.threadId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Object getAlert() {
         return alert;
@@ -63,25 +77,12 @@ public class Aps {
 
     public void check() {
         if (this.alert != null) {
-            if(this.alert instanceof Alert){
+            if (this.alert instanceof Alert) {
                 ((Alert) this.alert).check();
-            }else{
+            } else {
                 ValidatorUtils.checkArgument((this.alert instanceof String), "Alter should be Dictionary or String");
             }
         }
-    }
-
-    private Aps(Builder builder) {
-        this.alert = builder.alert;
-        this.badge = builder.badge;
-        this.sound = builder.sound;
-        this.contentAvailable = builder.contentAvailable;
-        this.category = builder.category;
-        this.threadId = builder.threadId;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

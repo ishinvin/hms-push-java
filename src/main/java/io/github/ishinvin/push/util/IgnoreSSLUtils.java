@@ -13,8 +13,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.util;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -23,13 +30,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 
 /**
  * A tool for ignoring ssl when creating httpclient
@@ -41,14 +41,14 @@ public class IgnoreSSLUtils {
         X509TrustManager trustManager = new X509TrustManager() {
             @Override
             public void checkClientTrusted(
-                    java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                    String paramString) throws CertificateException {
+                java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                String paramString) throws CertificateException {
             }
 
             @Override
             public void checkServerTrusted(
-                    java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                    String paramString) throws CertificateException {
+                java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                String paramString) throws CertificateException {
             }
 
             @Override
@@ -57,7 +57,7 @@ public class IgnoreSSLUtils {
             }
         };
 
-        sc.init(null, new TrustManager[]{trustManager}, null);
+        sc.init(null, new TrustManager[] {trustManager}, null);
         return sc;
     }
 
@@ -68,11 +68,10 @@ public class IgnoreSSLUtils {
         SSLContext sslcontext = createIgnoreVerifySSL();
 
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", PlainConnectionSocketFactory.INSTANCE)
-                .register("https", new SSLConnectionSocketFactory(sslcontext))
-                .build();
+            .register("http", PlainConnectionSocketFactory.INSTANCE)
+            .register("https", new SSLConnectionSocketFactory(sslcontext))
+            .build();
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-        HttpClients.custom().setConnectionManager(connManager);
 
         return HttpClients.custom().setConnectionManager(connManager).build();
     }

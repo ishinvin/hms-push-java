@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.examples;
 
 import com.alibaba.fastjson.JSONObject;
@@ -27,14 +28,13 @@ import io.github.ishinvin.push.util.InitAppUtils;
 public class SendInstanceAppMessage {
     /**
      * send instance app message
-     *
-     * @throws HuaweiMesssagingException
      */
     public void sendInstanceAppMessage() throws HuaweiMesssagingException {
         HuaweiApp app = InitAppUtils.initializeApp();
         HuaweiMessaging huaweiMessaging = HuaweiMessaging.getInstance(app);
 
-        String token = "AI838_-IxzMqKqeIoIqFgL9D5N8YunVqZXFU3jCohcmEkb1RMquoT7uxQkv3cXCv7IXwXjTsH0WK35DRrnLI6RBOWxqjnRqkbp6W5CFQj0zw09FG5sTuyZd2NHtxgVzUUg";
+        String token =
+            "AI838_-IxzMqKqeIoIqFgL9D5N8YunVqZXFU3jCohcmEkb1RMquoT7uxQkv3cXCv7IXwXjTsH0WK35DRrnLI6RBOWxqjnRqkbp6W5CFQj0zw09FG5sTuyZd2NHtxgVzUUg";
 
         JSONObject params = new JSONObject();
         params.put("key1", "test1");
@@ -61,9 +61,9 @@ public class SendInstanceAppMessage {
         AndroidConfig androidConfig = AndroidConfig.builder().setFastAppTargetType(1).build();
 
         Message message = Message.builder().setData(data)
-                .setAndroidConfig(androidConfig)
-                .addToken(token)
-                .build();
+            .setAndroidConfig(androidConfig)
+            .addToken(token)
+            .build();
 
         SendResponse response = huaweiMessaging.sendMessage(message);
     }

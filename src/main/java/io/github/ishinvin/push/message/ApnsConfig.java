@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.apns.ApnsHeaders;
 import io.github.ishinvin.push.apns.ApnsHmsOptions;
 import io.github.ishinvin.push.apns.Aps;
@@ -26,28 +26,13 @@ import java.util.Map;
 
 public class ApnsConfig {
     @JSONField(name = "hms_options")
-    private ApnsHmsOptions hmsOptions;
+    private final ApnsHmsOptions hmsOptions;
 
     @JSONField(name = "headers")
-    private ApnsHeaders apnsHeaders;
+    private final ApnsHeaders apnsHeaders;
 
     @JSONField(name = "payload")
     private Map<String, Object> payload = new HashMap<>();
-
-    public void check() {
-        if (this.hmsOptions != null) {
-            this.hmsOptions.check();
-        }
-        if (this.apnsHeaders != null) {
-            this.apnsHeaders.check();
-        }
-        if (this.payload != null) {
-            if (this.payload.get("aps") != null) {
-                Aps aps = (Aps) this.payload.get("aps");
-                aps.check();
-            }
-        }
-    }
 
     public ApnsConfig(Builder builder) {
         this.hmsOptions = builder.hmsOptions;
@@ -64,6 +49,28 @@ public class ApnsConfig {
         }
     }
 
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public void check() {
+        if (this.hmsOptions != null) {
+            this.hmsOptions.check();
+        }
+        if (this.apnsHeaders != null) {
+            this.apnsHeaders.check();
+        }
+        if (this.payload != null) {
+            if (this.payload.get("aps") != null) {
+                Aps aps = (Aps) this.payload.get("aps");
+                aps.check();
+            }
+        }
+    }
+
     public ApnsHmsOptions getHmsOptions() {
         return hmsOptions;
     }
@@ -76,16 +83,9 @@ public class ApnsConfig {
         return apnsHeaders;
     }
 
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
+        private final Map<String, Object> payload = new HashMap<>();
         private ApnsHmsOptions hmsOptions;
-        private Map<String, Object> payload = new HashMap<>();
         private ApnsHeaders apnsHeaders;
         private Aps aps;
 
@@ -96,6 +96,11 @@ public class ApnsConfig {
 
         public Builder addPayload(String key, Object value) {
             this.payload.put(key, value);
+            return this;
+        }
+
+        public Builder addPayload(Aps aps) {
+            this.aps = aps;
             return this;
         }
 
@@ -110,11 +115,6 @@ public class ApnsConfig {
         }
 
         public Builder addPayloadAps(Aps aps) {
-            this.aps = aps;
-            return this;
-        }
-
-        public Builder addPayload(Aps aps) {
             this.aps = aps;
             return this;
         }

@@ -16,6 +16,7 @@
  *                  Huawei Technologies Co., Ltd.
  *
  */
+
 package io.github.ishinvin.push.messaging;
 
 import org.apache.http.client.HttpClient;
@@ -24,7 +25,8 @@ import org.apache.http.client.HttpClient;
  * Provides trampolines into package-private APIs used by components of HCM
  */
 public final class ImplHuaweiTrampolines {
-    private ImplHuaweiTrampolines() {}
+    private ImplHuaweiTrampolines() {
+    }
 
     public static HuaweiCredential getCredential(HuaweiApp app) {
         return app.getOption().getCredential();

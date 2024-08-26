@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.android;
 
 import com.alibaba.fastjson.JSONObject;
@@ -22,12 +23,12 @@ import io.github.ishinvin.push.model.Importance;
 import io.github.ishinvin.push.model.Visibility;
 import io.github.ishinvin.push.util.CollectionUtils;
 import io.github.ishinvin.push.util.ValidatorUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import org.apache.commons.lang3.StringUtils;
+
 
 public class AndroidNotification {
 
@@ -38,115 +39,87 @@ public class AndroidNotification {
     private static final String VIBRATE_PATTERN = "[0-9]+|[0-9]+[sS]|[0-9]+[.][0-9]{1,9}|[0-9]+[.][0-9]{1,9}[sS]";
 
     @JSONField(name = "title")
-    private String title;
+    private final String title;
 
     @JSONField(name = "body")
-    private String body;
+    private final String body;
 
     @JSONField(name = "icon")
-    private String icon;
+    private final String icon;
 
     @JSONField(name = "color")
-    private String color;
+    private final String color;
 
     @JSONField(name = "sound")
-    private String sound;
+    private final String sound;
 
     @JSONField(name = "default_sound")
-    private boolean defaultSound;
+    private final boolean defaultSound;
 
     @JSONField(name = "tag")
-    private String tag;
+    private final String tag;
 
     @JSONField(name = "click_action")
-    private ClickAction clickAction;
+    private final ClickAction clickAction;
 
     @JSONField(name = "body_loc_key")
-    private String bodyLocKey;
-
+    private final String bodyLocKey;
+    @JSONField(name = "title_loc_key")
+    private final String titleLocKey;
+    @JSONField(name = "multi_lang_key")
+    private final JSONObject multiLangKey;
+    @JSONField(name = "channel_id")
+    private final String channelId;
+    @JSONField(name = "notify_summary")
+    private final String notifySummary;
+    @JSONField(name = "image")
+    private final String image;
+    @JSONField(name = "style")
+    private final Integer style;
+    @JSONField(name = "big_title")
+    private final String bigTitle;
+    @JSONField(name = "big_body")
+    private final String bigBody;
+    @JSONField(name = "auto_clear")
+    private final Integer autoClear;
+    @JSONField(name = "notify_id")
+    private final Integer notifyId;
+    @JSONField(name = "group")
+    private final String group;
+    @JSONField(name = "badge")
+    private final BadgeNotification badge;
+    @JSONField(name = "ticker")
+    private final String ticker;
+    @JSONField(name = "auto_cancel")
+    private final boolean autoCancel;
+    @JSONField(name = "when")
+    private final String when;
+    @JSONField(name = "importance")
+    private final String importance;
+    @JSONField(name = "use_default_vibrate")
+    private final boolean useDefaultVibrate;
+    @JSONField(name = "use_default_light")
+    private final boolean useDefaultLight;
+    @JSONField(name = "visibility")
+    private final String visibility;
+    @JSONField(name = "light_settings")
+    private final LightSettings lightSettings;
+    @JSONField(name = "foreground_show")
+    private final boolean foregroundShow;
+    @JSONField(name = "inbox_content")
+    private final List<String> inboxContent;
+    @JSONField(name = "buttons")
+    private final List<Button> buttons;
+    @JSONField(name = "profile_id")
+    private final String profileId;
     @JSONField(name = "body_loc_args")
     private List<String> bodyLocArgs = new ArrayList<>();
-
-    @JSONField(name = "title_loc_key")
-    private String titleLocKey;
-
     @JSONField(name = "title_loc_args")
     private List<String> titleLocArgs = new ArrayList<>();
-
-    @JSONField(name = "multi_lang_key")
-    private JSONObject multiLangKey;
-
-    @JSONField(name = "channel_id")
-    private String channelId;
-
-    @JSONField(name = "notify_summary")
-    private String notifySummary;
-
-    @JSONField(name = "image")
-    private String image;
-
-    @JSONField(name = "style")
-    private Integer style;
-
-    @JSONField(name = "big_title")
-    private String bigTitle;
-
-    @JSONField(name = "big_body")
-    private String bigBody;
-
-    @JSONField(name = "auto_clear")
-    private Integer autoClear;
-
-    @JSONField(name = "notify_id")
-    private Integer notifyId;
-
-    @JSONField(name = "group")
-    private String group;
-
-    @JSONField(name = "badge")
-    private BadgeNotification badge;
-
-    @JSONField(name = "ticker")
-    private String ticker;
-
-    @JSONField(name = "auto_cancel")
-    private boolean autoCancel;
-
-    @JSONField(name = "when")
-    private String when;
-
     @JSONField(name = "local_only")
     private Boolean localOnly;
-
-    @JSONField(name = "importance")
-    private String importance;
-
-    @JSONField(name = "use_default_vibrate")
-    private boolean useDefaultVibrate;
-
-    @JSONField(name = "use_default_light")
-    private boolean useDefaultLight;
-
     @JSONField(name = "vibrate_config")
     private List<String> vibrateConfig = new ArrayList<>();
-
-    @JSONField(name = "visibility")
-    private String visibility;
-
-    @JSONField(name = "light_settings")
-    private LightSettings lightSettings;
-
-    @JSONField(name = "foreground_show")
-    private boolean foregroundShow;
-
-    @JSONField(name = "inbox_content")
-    private List<String> inboxContent;
-
-    @JSONField(name = "buttons")
-    private List<Button> buttons;
-
-    @JSONField(name = "profile_id")
-    private String profileId;
 
     private AndroidNotification(Builder builder) {
         this.title = builder.title;
@@ -228,18 +201,27 @@ public class AndroidNotification {
     }
 
     /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * check androidNotification's parameters
      *
      * @param notification which is in message
      */
     public void check(Notification notification) {
         if (null != notification) {
-            ValidatorUtils.checkArgument(StringUtils.isNotEmpty(notification.getTitle()) || StringUtils.isNotEmpty(this.title), "title should be set");
+            ValidatorUtils.checkArgument(StringUtils.isNotEmpty(notification.getTitle()) || StringUtils.isNotEmpty(this.title),
+                "title should be set");
             ValidatorUtils.checkArgument(StringUtils.isNotEmpty(notification.getBody()) || StringUtils.isNotEmpty(this.body), "body should be set");
         }
 
         if (StringUtils.isNotEmpty(this.color)) {
-            ValidatorUtils.checkArgument(this.color.matches(AndroidNotification.COLOR_PATTERN), "Wrong color format, color must be in the form #RRGGBB");
+            ValidatorUtils.checkArgument(this.color.matches(AndroidNotification.COLOR_PATTERN),
+                "Wrong color format, color must be in the form #RRGGBB");
         }
 
         if (this.clickAction != null) {
@@ -261,19 +243,21 @@ public class AndroidNotification {
         //Style 0,1,2
         if (this.style != null) {
             boolean isTrue = this.style == 0 ||
-                    this.style == 1 ||
-                    this.style == 3;
+                this.style == 1 ||
+                this.style == 3;
             ValidatorUtils.checkArgument(isTrue, "style should be one of 0:default, 1: big text, 3: Inbox");
 
             if (this.style == 1) {
-                ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.bigTitle) && StringUtils.isNotEmpty(this.bigBody), "title and body are required when style = 1");
+                ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.bigTitle) && StringUtils.isNotEmpty(this.bigBody),
+                    "title and body are required when style = 1");
             } else if (this.style == 3) {
-                ValidatorUtils.checkArgument(!CollectionUtils.isEmpty(this.inboxContent) && this.inboxContent.size() <= 5, "inboxContent is required when style = 3 and at most 5 inbox content is needed");
+                ValidatorUtils.checkArgument(!CollectionUtils.isEmpty(this.inboxContent) && this.inboxContent.size() <= 5,
+                    "inboxContent is required when style = 3 and at most 5 inbox content is needed");
             }
         }
 
         if (this.autoClear != null) {
-            ValidatorUtils.checkArgument(this.autoClear.intValue() > 0, "auto clear should positive value");
+            ValidatorUtils.checkArgument(this.autoClear > 0, "auto clear should positive value");
         }
 
         if (badge != null) {
@@ -282,9 +266,9 @@ public class AndroidNotification {
 
         if (this.importance != null) {
             ValidatorUtils.checkArgument(StringUtils.equals(this.importance, Importance.LOW.getValue())
-                            || StringUtils.equals(this.importance, Importance.NORMAL.getValue())
-                            || StringUtils.equals(this.importance, Importance.HIGH.getValue()),
-                    "importance shouid be [HIGH, NORMAL, LOW]");
+                    || StringUtils.equals(this.importance, Importance.NORMAL.getValue())
+                    || StringUtils.equals(this.importance, Importance.HIGH.getValue()),
+                "importance shouid be [HIGH, NORMAL, LOW]");
         }
 
         if (!CollectionUtils.isEmpty(this.vibrateConfig)) {
@@ -292,17 +276,18 @@ public class AndroidNotification {
             for (String vibrateTiming : this.vibrateConfig) {
                 ValidatorUtils.checkArgument(vibrateTiming.matches(AndroidNotification.VIBRATE_PATTERN), "Wrong vibrate timing format");
                 long vibrateTimingValue = (long) (1000 * Double
-                        .valueOf(StringUtils.substringBefore(vibrateTiming.toLowerCase(Locale.getDefault()), "s")));
-                ValidatorUtils.checkArgument(vibrateTimingValue > 0 && vibrateTimingValue < 60000, "Vibrate timing duration must be greater than 0 and less than 60s");
+                    .parseDouble(StringUtils.substringBefore(vibrateTiming.toLowerCase(Locale.getDefault()), "s")));
+                ValidatorUtils.checkArgument(vibrateTimingValue > 0 && vibrateTimingValue < 60000,
+                    "Vibrate timing duration must be greater than 0 and less than 60s");
             }
         }
 
         if (this.visibility != null) {
             ValidatorUtils.checkArgument(StringUtils.equals(this.visibility, Visibility.VISIBILITY_UNSPECIFIED.getValue())
-                            || StringUtils.equals(this.visibility, Visibility.PRIVATE.getValue())
-                            || StringUtils.equals(this.visibility, Visibility.PUBLIC.getValue())
-                            || StringUtils.equals(this.visibility, Visibility.SECRET.getValue()),
-                    "visibility shouid be [VISIBILITY_UNSPECIFIED, PRIVATE, PUBLIC, SECRET]");
+                    || StringUtils.equals(this.visibility, Visibility.PRIVATE.getValue())
+                    || StringUtils.equals(this.visibility, Visibility.PUBLIC.getValue())
+                    || StringUtils.equals(this.visibility, Visibility.SECRET.getValue()),
+                "visibility shouid be [VISIBILITY_UNSPECIFIED, PRIVATE, PUBLIC, SECRET]");
         }
 
         // multiLangKey
@@ -481,19 +466,17 @@ public class AndroidNotification {
         return buttons;
     }
 
-    public String getProfileId() { return profileId; }
-
-    /**
-     * builder
-     *
-     * @return
-     */
-    public static Builder builder() {
-        return new Builder();
+    public String getProfileId() {
+        return profileId;
     }
 
     public static class Builder {
 
+        private final List<String> bodyLocArgs = new ArrayList<>();
+        private final List<String> titleLocArgs = new ArrayList<>();
+        private final List<String> vibrateConfig = new ArrayList<>();
+        private final List<String> inboxContent = new ArrayList<>();
+        private final List<Button> buttons = new ArrayList<Button>();
         private String title;
         private String body;
         private String icon;
@@ -503,9 +486,7 @@ public class AndroidNotification {
         private String tag;
         private ClickAction clickAction;
         private String bodyLocKey;
-        private List<String> bodyLocArgs = new ArrayList<>();
         private String titleLocKey;
-        private List<String> titleLocArgs = new ArrayList<>();
         private JSONObject multiLangkey;
         private String channelId;
         private String notifySummary;
@@ -516,23 +497,16 @@ public class AndroidNotification {
         private Integer autoClear;
         private Integer notifyId;
         private String group;
-
         private BadgeNotification badge;
-
         private String ticker;
         private boolean autoCancel = true;
         private String when;
         private String importance;
         private boolean useDefaultVibrate;
         private boolean useDefaultLight;
-        private List<String> vibrateConfig = new ArrayList<>();
         private String visibility;
         private LightSettings lightSettings;
         private boolean foregroundShow;
-
-        private List<String> inboxContent = new ArrayList<>();
-        private List<Button> buttons = new ArrayList<Button>();
-
         private String profileId;
 
         private Builder() {

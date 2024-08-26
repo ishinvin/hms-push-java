@@ -1,7 +1,13 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'checkstyle'
 }
+
+group = 'io.github.ishinvin.push'
+version = System.getenv("GITHUB_RELEASE_VERSION") ?: "0.0.1-SNAPSHOT"
+description = 'hms-push-java'
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -17,7 +23,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 }
 
-group = 'io.github.ishinvin.push'
-version = '1.0'
-description = 'hms-push-java'
-java.sourceCompatibility = JavaVersion.VERSION_11
+checkstyle {
+    toolVersion = "10.16.0"
+}

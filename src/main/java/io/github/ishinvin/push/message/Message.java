@@ -13,12 +13,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Booleans;
-
 import io.github.ishinvin.push.util.CollectionUtils;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.ArrayList;
@@ -26,28 +26,25 @@ import java.util.List;
 
 public class Message {
     @JSONField(name = "data")
-    private String data;
+    private final String data;
 
     @JSONField(name = "notification")
-    private Notification notification;
+    private final Notification notification;
 
     @JSONField(name = "android")
-    private AndroidConfig androidConfig;
+    private final AndroidConfig androidConfig;
 
     @JSONField(name = "apns")
-    private ApnsConfig apns;
+    private final ApnsConfig apns;
 
     @JSONField(name = "webpush")
-    private WebPushConfig webpush;
-
+    private final WebPushConfig webpush;
+    @JSONField(name = "topic")
+    private final String topic;
+    @JSONField(name = "condition")
+    private final String condition;
     @JSONField(name = "token")
     private List<String> token = new ArrayList<>();
-
-    @JSONField(name = "topic")
-    private String topic;
-
-    @JSONField(name = "condition")
-    private String condition;
 
     private Message(Builder builder) {
         this.data = builder.data;
@@ -65,8 +62,15 @@ public class Message {
         this.topic = builder.topic;
         this.condition = builder.condition;
 
-        /** check after message is created */
+        /* check after message is created */
         check();
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -75,9 +79,9 @@ public class Message {
     public void check() {
 
         int count = Booleans.countTrue(
-                !CollectionUtils.isEmpty(this.token),
-                !Strings.isNullOrEmpty(this.topic),
-                !Strings.isNullOrEmpty(this.condition)
+            !CollectionUtils.isEmpty(this.token),
+            !Strings.isNullOrEmpty(this.topic),
+            !Strings.isNullOrEmpty(this.condition)
         );
 
         ValidatorUtils.checkArgument(count == 1, "Exactly one of token, topic or condition must be specified");
@@ -135,24 +139,15 @@ public class Message {
     }
 
     /**
-     * builder
-     *
-     * @return
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
      * push message builder
      */
     public static class Builder {
+        private final List<String> token = new ArrayList<>();
         private String data;
         private Notification notification;
         private AndroidConfig androidConfig;
         private ApnsConfig apns;
         private WebPushConfig webpush;
-        private List<String> token = new ArrayList<>();
         private String topic;
         private String condition;
 

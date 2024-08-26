@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.android;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -22,18 +23,25 @@ public class LightSettings {
     private static final String LIGTH_DURATION_PATTERN = "\\d+|\\d+[sS]|\\d+.\\d{1,9}|\\d+.\\d{1,9}[sS]";
 
     @JSONField(name = "color")
-    private Color color;
+    private final Color color;
 
     @JSONField(name = "light_on_duration")
-    private String lightOnDuration;
+    private final String lightOnDuration;
 
     @JSONField(name = "light_off_duration")
-    private String lightOffDuration;
+    private final String lightOffDuration;
 
     public LightSettings(Builder builder) {
         this.color = builder.color;
         this.lightOnDuration = builder.lightOnDuration;
         this.lightOffDuration = builder.lightOffDuration;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public Color getColor() {
@@ -54,9 +62,7 @@ public class LightSettings {
     public void check() {
         ValidatorUtils.checkArgument(this.color != null, "color must be selected when light_settings is set");
 
-        if (this.color != null) {
-            this.color.check();
-        }
+        this.color.check();
 
         ValidatorUtils.checkArgument(this.lightOnDuration != null, "light_on_duration must be selected when light_settings is set");
 
@@ -65,13 +71,6 @@ public class LightSettings {
         ValidatorUtils.checkArgument(this.lightOnDuration.matches(LIGTH_DURATION_PATTERN), "light_on_duration format is wrong");
 
         ValidatorUtils.checkArgument(this.lightOffDuration.matches(LIGTH_DURATION_PATTERN), "light_off_duration format is wrong");
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

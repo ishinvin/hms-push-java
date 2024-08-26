@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.model;
 
 public enum Importance {
@@ -20,7 +21,7 @@ public enum Importance {
      * LOW
      */
     LOW("LOW"),
-
+    
     /**
      * NORMAL
      */
@@ -31,9 +32,9 @@ public enum Importance {
      */
     HIGH("HIGH");
 
-    private String value;
+    private final String value;
 
-    private Importance(String value) {
+    Importance(String value) {
         this.value = value;
     }
 

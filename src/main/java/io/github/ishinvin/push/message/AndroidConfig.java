@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 package io.github.ishinvin.push.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
 import io.github.ishinvin.push.android.AndroidNotification;
 import io.github.ishinvin.push.model.Urgency;
 import io.github.ishinvin.push.util.ValidatorUtils;
@@ -26,31 +26,31 @@ public class AndroidConfig {
     private static final String TTL_PATTERN = "\\d+|\\d+[sS]|\\d+.\\d{1,9}|\\d+.\\d{1,9}[sS]";
 
     @JSONField(name = "collapse_key")
-    private Integer collapseKey;
+    private final Integer collapseKey;
 
     @JSONField(name = "urgency")
-    private String urgency;
+    private final String urgency;
 
     @JSONField(name = "category")
-    private String category;
+    private final String category;
 
     @JSONField(name = "ttl")
-    private String ttl;
+    private final String ttl;
 
     @JSONField(name = "bi_tag")
-    private String biTag;
+    private final String biTag;
 
     @JSONField(name = "fast_app_target")
-    private Integer fastAppTargetType;
+    private final Integer fastAppTargetType;
 
     @JSONField(name = "data")
-    private String data;
+    private final String data;
 
     @JSONField(name = "notification")
-    private AndroidNotification notification;
+    private final AndroidNotification notification;
 
     @JSONField(name = "receipt_id")
-    private String receiptId;
+    private final String receiptId;
 
     public AndroidConfig(Builder builder) {
         this.collapseKey = builder.collapseKey;
@@ -71,6 +71,13 @@ public class AndroidConfig {
     }
 
     /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * check androidConfig's parameters
      *
      * @param notification whcic is in message
@@ -82,8 +89,8 @@ public class AndroidConfig {
 
         if (this.urgency != null) {
             ValidatorUtils.checkArgument(StringUtils.equals(this.urgency, Urgency.HIGH.getValue())
-                            || StringUtils.equals(this.urgency, Urgency.NORMAL.getValue()),
-                    "urgency shouid be [HIGH, NORMAL]");
+                    || StringUtils.equals(this.urgency, Urgency.NORMAL.getValue()),
+                "urgency shouid be [HIGH, NORMAL]");
         }
 
         if (StringUtils.isNotEmpty(this.ttl)) {
@@ -134,13 +141,8 @@ public class AndroidConfig {
         return data;
     }
 
-    public String getReceiptId() { return receiptId; }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
+    public String getReceiptId() {
+        return receiptId;
     }
 
     public static class Builder {
