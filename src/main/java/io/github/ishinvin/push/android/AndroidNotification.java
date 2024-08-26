@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 
-
 public class AndroidNotification {
 
     private static final String COLOR_PATTERN = "^#[0-9a-fA-F]{6}$";

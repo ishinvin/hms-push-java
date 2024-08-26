@@ -19,7 +19,6 @@ package io.github.ishinvin.push.android;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
-
 public class BadgeNotification {
     @JSONField(name = "add_num")
     private final Integer addNum;
