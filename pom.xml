@@ -5,7 +5,7 @@
 
     <groupId>io.github.ishinvin</groupId>
     <artifactId>hms-push-java</artifactId>
-    <version>1.0.1</version>
+    <version>${env.GITHUB_RELEASE_VERSION}</version>
     <packaging>jar</packaging>
 
     <dependencies>
