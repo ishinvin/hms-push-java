@@ -68,6 +68,6 @@ publishing {
 }
 
 signing {
-    useInMemoryPgpKeys(findProperty("signing.keyId") as String, findProperty("signing.password") as String)
+    useGpgCmd()
     sign publishing.publications.mavenJava
 }
