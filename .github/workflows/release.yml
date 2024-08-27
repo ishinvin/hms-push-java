@@ -29,15 +29,12 @@ jobs:
       - name: List keys
         run: gpg -K
 
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@3.9.8
-
       - name: Publish to Maven Central
+        run: ./mvnw --batch-mode deploy
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
           SIGNING_KEY_PASSWORD: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
           GITHUB_RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-        run: ./mvnw deploy
 
