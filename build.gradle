@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'checkstyle'
+    id 'signing'
 }
 
 group = 'io.github.ishinvin.push'
@@ -25,4 +26,48 @@ dependencies {
 
 checkstyle {
     toolVersion = "10.16.0"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'HMS Push Java'
+                description = 'push notification with HMS Push Kit'
+                url = 'https://github.com/ishinvin/hms-push-java'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'io.github.ishinvin'
+                        name = 'Ishin Vin'
+                        email = 'ishinvin26@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(findProperty("signing.keyId") as String, findProperty("signing.password") as String)
+    sign publishing.publications.mavenJava
 }
