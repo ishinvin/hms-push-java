@@ -16,36 +16,18 @@
 
 package io.github.ishinvin.push.android;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class BadgeNotification {
     @JSONField(name = "add_num")
-    private final Integer addNum;
+    private Integer addNum;
 
     @JSONField(name = "class")
-    private final String badgeClass;
+    private String badgeClass;
 
     @JSONField(name = "set_num")
     private Integer setNum;
-
-    public BadgeNotification(Integer addNum, String badgeClass) {
-        this.addNum = addNum;
-        this.badgeClass = badgeClass;
-    }
-
-    public BadgeNotification(Builder builder) {
-        this.addNum = builder.addNum;
-        this.badgeClass = builder.badgeClass;
-        this.setNum = builder.setNum;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
 
     public Integer getAddNum() {
         return addNum;
@@ -59,13 +41,31 @@ public class BadgeNotification {
         return setNum;
     }
 
+    public BadgeNotification(Integer addNum, String badgeClass) {
+        this.addNum = addNum;
+        this.badgeClass = badgeClass;
+    }
+
+    public BadgeNotification(Builder builder) {
+        this.addNum = builder.addNum;
+        this.badgeClass = builder.badgeClass;
+        this.setNum = builder.setNum;
+    }
+
     public void check() {
         if (this.addNum != null) {
-            ValidatorUtils.checkArgument(this.addNum > 0 && this.addNum < 100, "add_num should locate between 0 and 100");
+            ValidatorUtils.checkArgument(this.addNum.intValue() > 0 && this.addNum.intValue() < 100, "add_num should locate between 0 and 100");
         }
         if (this.setNum != null) {
-            ValidatorUtils.checkArgument(this.setNum >= 0 && this.setNum < 100, "set_num should locate between 0 and 100");
+            ValidatorUtils.checkArgument(this.setNum.intValue() >= 0 && this.setNum.intValue() < 100, "set_num should locate between 0 and 100");
         }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

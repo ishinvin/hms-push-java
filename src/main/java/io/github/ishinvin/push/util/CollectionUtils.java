@@ -22,10 +22,10 @@ import java.util.Map;
 /**
  * A tool for processing collections
  */
-public class CollectionUtils {
-    public CollectionUtils() {
+public final class CollectionUtils {
+    private CollectionUtils() {
     }
-    
+
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }

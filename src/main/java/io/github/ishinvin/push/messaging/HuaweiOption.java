@@ -34,7 +34,7 @@ public class HuaweiOption {
     private final CloseableHttpClient httpClient;
     private final ThreadManager threadManager;
 
-    private HuaweiOption(HuaweiOption.Builder builder) {
+    private HuaweiOption(Builder builder) {
         ValidatorUtils.checkArgument(builder.credential != null, "HuaweiOption must be initialized with setCredential()");
         this.credential = builder.credential;
 
@@ -43,13 +43,6 @@ public class HuaweiOption {
 
         ValidatorUtils.checkArgument(builder.threadManager != null, "HuaweiOption must be initialized with a non-null threadManager");
         this.threadManager = builder.threadManager;
-    }
-
-    /**
-     * Builder for constructing {@link HuaweiOption}.
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -62,7 +55,7 @@ public class HuaweiOption {
     }
 
     /**
-     * Returns an instance of httpclient used for sending http request.
+     * Returns a instance of httpclient used for sending http request.
      *
      * @return A <code>httpclient</code> instance.
      */
@@ -74,10 +67,16 @@ public class HuaweiOption {
         return threadManager;
     }
 
+    /**
+     * Builder for constructing {@link HuaweiOption}.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static final class Builder {
         private HuaweiCredential credential;
         private CloseableHttpClient httpClient;
-        private ThreadManager threadManager = HuaweiThreadManager.DEFAULT_THREAD_MANAGER;
 
         {
             try {
@@ -87,6 +86,7 @@ public class HuaweiOption {
             }
         }
 
+        private ThreadManager threadManager = HuaweiThreadManager.DEFAULT_THREAD_MANAGER;
 
         public Builder() {
         }

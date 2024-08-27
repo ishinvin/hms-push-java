@@ -70,7 +70,7 @@ public abstract class ThreadManager {
     protected abstract ThreadFactory getThreadFactory();
 
     static final class HuaweiExecutors {
-        private final ExecutorService userExecutor;
+        private ExecutorService userExecutor;
 
         private HuaweiExecutors(ExecutorService userExecutor) {
             ValidatorUtils.checkArgument(userExecutor != null, "ExecutorService must not be null");

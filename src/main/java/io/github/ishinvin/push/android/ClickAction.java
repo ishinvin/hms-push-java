@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.android;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,7 +24,7 @@ public class ClickAction {
     private static final String PATTERN = "^https.*";
 
     @JSONField(name = "type")
-    private final Integer type;
+    private Integer type;
 
     @JSONField(name = "intent")
     private String intent;
@@ -54,13 +54,6 @@ public class ClickAction {
             default:
                 break;
         }
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -112,6 +105,13 @@ public class ClickAction {
 
     public String getAction() {
         return action;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

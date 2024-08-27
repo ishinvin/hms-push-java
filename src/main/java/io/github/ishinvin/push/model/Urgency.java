@@ -20,9 +20,9 @@ public enum Urgency {
     HIGH("HIGH"),
     NORMAL("NORMAL");
 
-    private final String value;
+    private String value;
 
-    Urgency(String value) {
+    private Urgency(String value) {
         this.value = value;
     }
 

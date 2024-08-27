@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.android.AndroidNotification;
 import io.github.ishinvin.push.model.Urgency;
 import io.github.ishinvin.push.util.ValidatorUtils;
@@ -26,31 +26,31 @@ public class AndroidConfig {
     private static final String TTL_PATTERN = "\\d+|\\d+[sS]|\\d+.\\d{1,9}|\\d+.\\d{1,9}[sS]";
 
     @JSONField(name = "collapse_key")
-    private final Integer collapseKey;
+    private Integer collapseKey;
 
     @JSONField(name = "urgency")
-    private final String urgency;
+    private String urgency;
 
     @JSONField(name = "category")
-    private final String category;
+    private String category;
 
     @JSONField(name = "ttl")
-    private final String ttl;
+    private String ttl;
 
     @JSONField(name = "bi_tag")
-    private final String biTag;
+    private String biTag;
 
     @JSONField(name = "fast_app_target")
-    private final Integer fastAppTargetType;
+    private Integer fastAppTargetType;
 
     @JSONField(name = "data")
-    private final String data;
+    private String data;
 
     @JSONField(name = "notification")
-    private final AndroidNotification notification;
+    private AndroidNotification notification;
 
     @JSONField(name = "receipt_id")
-    private final String receiptId;
+    private String receiptId;
 
     public AndroidConfig(Builder builder) {
         this.collapseKey = builder.collapseKey;
@@ -68,13 +68,6 @@ public class AndroidConfig {
         this.data = builder.data;
         this.notification = builder.notification;
         this.receiptId = builder.receiptId;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -143,6 +136,13 @@ public class AndroidConfig {
 
     public String getReceiptId() {
         return receiptId;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

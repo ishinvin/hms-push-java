@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.apns;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class ApnsHeaders {
@@ -29,38 +29,22 @@ public class ApnsHeaders {
     private static final int SEND_BY_GROUP = 5;
 
     @JSONField(name = "authorization")
-    private final String authorization;
+    private String authorization;
 
     @JSONField(name = "apns-id")
-    private final String apnsId;
+    private String apnsId;
 
     @JSONField(name = "apns-expiration")
-    private final Long apnsExpiration;
+    private Long apnsExpiration;
 
     @JSONField(name = "apns-priority")
-    private final String apnsPriority;
+    private String apnsPriority;
 
     @JSONField(name = "apns-topic")
-    private final String apnsTopic;
+    private String apnsTopic;
 
     @JSONField(name = "apns-collapse-id")
-    private final String apnsCollapseId;
-
-    private ApnsHeaders(Builder builder) {
-        this.authorization = builder.authorization;
-        this.apnsId = builder.apnsId;
-        this.apnsExpiration = builder.apnsExpiration;
-        this.apnsPriority = builder.apnsPriority;
-        this.apnsTopic = builder.apnsTopic;
-        this.apnsCollapseId = builder.apnsCollapseId;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    private String apnsCollapseId;
 
     public String getAuthorization() {
         return authorization;
@@ -100,6 +84,22 @@ public class ApnsHeaders {
         if (this.apnsCollapseId != null) {
             ValidatorUtils.checkArgument(this.apnsCollapseId.getBytes().length < 64, "Number of apnsCollapseId bytes should be less than 64");
         }
+    }
+
+    private ApnsHeaders(Builder builder) {
+        this.authorization = builder.authorization;
+        this.apnsId = builder.apnsId;
+        this.apnsExpiration = builder.apnsExpiration;
+        this.apnsPriority = builder.apnsPriority;
+        this.apnsTopic = builder.apnsTopic;
+        this.apnsCollapseId = builder.apnsCollapseId;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

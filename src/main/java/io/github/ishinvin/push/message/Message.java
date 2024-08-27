@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Booleans;
 import io.github.ishinvin.push.util.CollectionUtils;
@@ -26,25 +26,28 @@ import java.util.List;
 
 public class Message {
     @JSONField(name = "data")
-    private final String data;
+    private String data;
 
     @JSONField(name = "notification")
-    private final Notification notification;
+    private Notification notification;
 
     @JSONField(name = "android")
-    private final AndroidConfig androidConfig;
+    private AndroidConfig androidConfig;
 
     @JSONField(name = "apns")
-    private final ApnsConfig apns;
+    private ApnsConfig apns;
 
     @JSONField(name = "webpush")
-    private final WebPushConfig webpush;
-    @JSONField(name = "topic")
-    private final String topic;
-    @JSONField(name = "condition")
-    private final String condition;
+    private WebPushConfig webpush;
+
     @JSONField(name = "token")
     private List<String> token = new ArrayList<>();
+
+    @JSONField(name = "topic")
+    private String topic;
+
+    @JSONField(name = "condition")
+    private String condition;
 
     private Message(Builder builder) {
         this.data = builder.data;
@@ -62,15 +65,7 @@ public class Message {
         this.topic = builder.topic;
         this.condition = builder.condition;
 
-        /* check after message is created */
         check();
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -139,15 +134,22 @@ public class Message {
     }
 
     /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * push message builder
      */
     public static class Builder {
-        private final List<String> token = new ArrayList<>();
         private String data;
         private Notification notification;
         private AndroidConfig androidConfig;
         private ApnsConfig apns;
         private WebPushConfig webpush;
+        private List<String> token = new ArrayList<>();
         private String topic;
         private String condition;
 

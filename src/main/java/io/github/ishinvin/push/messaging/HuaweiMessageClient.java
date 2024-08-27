@@ -16,7 +16,6 @@
 
 package io.github.ishinvin.push.messaging;
 
-
 import io.github.ishinvin.push.exception.HuaweiMesssagingException;
 import io.github.ishinvin.push.message.Message;
 import io.github.ishinvin.push.message.TopicMessage;
@@ -33,6 +32,7 @@ public interface HuaweiMessageClient {
      * @param message      message {@link Message}
      * @param validateOnly A boolean indicating whether to send message for test. or not.
      * @return {@link SendResponse}.
+     * @throws HuaweiMesssagingException
      */
     SendResponse send(Message message, boolean validateOnly, String accessToken) throws HuaweiMesssagingException;
 

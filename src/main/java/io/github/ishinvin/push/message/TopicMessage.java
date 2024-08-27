@@ -16,35 +16,20 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TopicMessage {
     @JSONField(name = "topic")
-    private final String topic;
-    @JSONField(name = "token")
-    private final String token;
+    private String topic;
+
     @JSONField(name = "tokenArray")
     private List<String> tokenArray = new ArrayList<String>();
 
-    private TopicMessage(Builder builder) {
-        this.topic = builder.topic;
-        if (!CollectionUtils.isEmpty(builder.tokenArray)) {
-            this.tokenArray.addAll(builder.tokenArray);
-        } else {
-            this.tokenArray = null;
-        }
-        this.token = builder.token;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    @JSONField(name = "token")
+    private String token;
 
     public String getTopic() {
         return topic;
@@ -58,9 +43,28 @@ public class TopicMessage {
         return token;
     }
 
+    private TopicMessage(Builder builder) {
+        this.topic = builder.topic;
+        if (!CollectionUtils.isEmpty(builder.tokenArray)) {
+            this.tokenArray.addAll(builder.tokenArray);
+        } else {
+            this.tokenArray = null;
+        }
+        this.token = builder.token;
+    }
+
+    /**
+     * builder
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
-        private final List<String> tokenArray = new ArrayList<String>();
         private String topic;
+        private List<String> tokenArray = new ArrayList<String>();
         private String token;
 
         public Builder setTopic(String topic) {

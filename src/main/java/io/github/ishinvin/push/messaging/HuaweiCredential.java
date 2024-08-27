@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.messaging;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import io.github.ishinvin.push.util.Constants;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -37,12 +37,14 @@ import org.slf4j.LoggerFactory;
  */
 public class HuaweiCredential {
     private static final Logger logger = LoggerFactory.getLogger(HuaweiCredential.class);
-    private final String appId;
-    private final String appSecret;
-    private final Lock lock;
-    private final CloseableHttpClient httpClient;
+
+    private String appId;
+    private String appSecret;
+
     private String accessToken;
     private long expireIn;
+    private Lock lock;
+    private CloseableHttpClient httpClient;
 
     private HuaweiCredential(Builder builder) {
         this.lock = new ReentrantLock();
@@ -53,13 +55,6 @@ public class HuaweiCredential {
         } else {
             this.httpClient = builder.httpClient;
         }
-    }
-
-    /**
-     * Builder for constructing {@link HuaweiCredential}.
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -131,6 +126,13 @@ public class HuaweiCredential {
 
     public String getAppId() {
         return appId;
+    }
+
+    /**
+     * Builder for constructing {@link HuaweiCredential}.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 public class TokenRefresher {
     private static final Logger logger = LoggerFactory.getLogger(TokenRefresher.class);
 
-    private final HuaweiApp app;
-    private final HuaweiCredential credential;
+    private HuaweiApp app;
+    private HuaweiCredential credential;
 
     private Future future;
 
@@ -62,7 +62,7 @@ public class TokenRefresher {
      */
     public void scheduleRefresh(final long period) {
         cancelPrevious();
-        scheduleNext(credential::refreshToken, period, period);
+        scheduleNext(() -> credential.refreshToken(), period, period);
     }
 
     private void cancelPrevious() {

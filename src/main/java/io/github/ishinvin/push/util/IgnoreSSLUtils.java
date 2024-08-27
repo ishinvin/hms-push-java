@@ -72,6 +72,7 @@ public class IgnoreSSLUtils {
             .register("https", new SSLConnectionSocketFactory(sslcontext))
             .build();
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        // HttpClients.custom().setConnectionManager(connManager);
 
         return HttpClients.custom().setConnectionManager(connManager).build();
     }

@@ -21,7 +21,7 @@ public enum Importance {
      * LOW
      */
     LOW("LOW"),
-    
+
     /**
      * NORMAL
      */
@@ -32,9 +32,9 @@ public enum Importance {
      */
     HIGH("HIGH");
 
-    private final String value;
+    private String value;
 
-    Importance(String value) {
+    private Importance(String value) {
         this.value = value;
     }
 

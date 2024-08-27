@@ -45,29 +45,39 @@ import org.slf4j.LoggerFactory;
  */
 public class HuaweiApp {
     private static final Logger logger = LoggerFactory.getLogger(HuaweiApp.class);
+
+    private String appId;
+    private HuaweiOption option;
+
     /**
      * Global lock
      */
     private static final Object appsLock = new Object();
+
     /**
-     * Store a map of <"appId", HuaweiApp>
+     * Store a map of [appId, HuaweiApp]
      */
     private static final Map<String, HuaweiApp> instances = new HashMap<>();
+
     /**
      * HuaweiMessaging can be added in the pattern of service, whcih is designed for Scalability
      */
     private final Map<String, HuaweiService> services = new HashMap<>();
+
+    private TokenRefresher tokenRefresher;
+
+    private volatile ScheduledExecutorService scheduledExecutor;
+
+    private ThreadManager threadManager;
+
+    private ThreadManager.HuaweiExecutors executors;
+
     private final AtomicBoolean deleted = new AtomicBoolean();
+
     /**
      * lock for synchronizing all internal HuaweiApp state changes
      */
     private final Object lock = new Object();
-    private final String appId;
-    private final HuaweiOption option;
-    private final TokenRefresher tokenRefresher;
-    private final ThreadManager threadManager;
-    private final ThreadManager.HuaweiExecutors executors;
-    private volatile ScheduledExecutorService scheduledExecutor;
 
     private HuaweiApp(HuaweiOption option) {
         ValidatorUtils.checkArgument(option != null, "HuaweiOption must not be null");
@@ -78,13 +88,16 @@ public class HuaweiApp {
         this.executors = threadManager.getHuaweiExecutors(this);
     }
 
+    public HuaweiOption getOption() {
+        return option;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
     /**
      * Returns the instance identified by the unique appId, or throws if it does not exist.
-     *
-     * @param option represents the id of the {@link HuaweiApp} instance.
-     * @return the {@link HuaweiApp} corresponding to the id.
-     * @throws IllegalStateException if the {@link HuaweiApp} was not initialized, either via {@link
-     *                               #initializeApp(HuaweiOption)} or {@link #getApps()}.
      */
     public static HuaweiApp getInstance(HuaweiOption option) {
         String appId = option.getCredential().getAppId();
@@ -93,7 +106,6 @@ public class HuaweiApp {
             if (app != null) {
                 return app;
             }
-
             return initializeApp(option);
         }
     }
@@ -142,27 +154,6 @@ public class HuaweiApp {
         List<String> sortedIdList = new ArrayList<>(allAppIds);
         Collections.sort(sortedIdList);
         return sortedIdList;
-    }
-
-    /**
-     * It is just for test
-     */
-    public static void clearInstancesForTest() {
-        synchronized (appsLock) {
-            //copy before delete
-            for (HuaweiApp app : ImmutableList.copyOf(instances.values())) {
-                app.delete();
-            }
-            instances.clear();
-        }
-    }
-
-    public HuaweiOption getOption() {
-        return option;
-    }
-
-    public String getAppId() {
-        return appId;
     }
 
     /**
@@ -262,6 +253,19 @@ public class HuaweiApp {
         synchronized (lock) {
             checkNotDeleted();
             tokenRefresher.start();
+        }
+    }
+
+    /**
+     * It is just for test
+     */
+    public static void clearInstancesForTest() {
+        synchronized (appsLock) {
+            //copy before delete
+            for (HuaweiApp app : ImmutableList.copyOf(instances.values())) {
+                app.delete();
+            }
+            instances.clear();
         }
     }
 }

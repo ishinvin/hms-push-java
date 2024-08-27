@@ -20,10 +20,10 @@ public enum TopicOperation {
     SUBSCRIBE("subscribe"),
     UNSUBSCRIBE("unsubscribe"),
     LIST("list");
-    
-    private final String value;
 
-    TopicOperation(String value) {
+    private String value;
+
+    private TopicOperation(String value) {
         this.value = value;
     }
 

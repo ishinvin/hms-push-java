@@ -16,9 +16,9 @@
 
 package io.github.ishinvin.push.messaging;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import io.github.ishinvin.push.exception.HuaweiMesssagingException;
 import io.github.ishinvin.push.message.Message;
 import io.github.ishinvin.push.message.TopicMessage;
@@ -42,10 +42,10 @@ import org.apache.http.util.EntityUtils;
 
 public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     private final String HcmPushUrl;
-    private final CloseableHttpClient httpClient;
     private String hcmTopicUrl;
     private String hcmGroupUrl;
     private String hcmTokenUrl;
+    private final CloseableHttpClient httpClient;
 
     private HuaweiMessageClientImpl(Builder builder) {
         this.HcmPushUrl = MessageFormat.format(Constants.PUSH_URL + "/v1/{0}/messages:send", builder.appId);
@@ -53,18 +53,6 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
 
         ValidatorUtils.checkArgument(builder.httpClient != null, "requestFactory must not be null");
         this.httpClient = builder.httpClient;
-    }
-
-    static HuaweiMessageClientImpl fromApp(HuaweiApp app) {
-        String appId = ImplHuaweiTrampolines.getAppId(app);
-        return HuaweiMessageClientImpl.builder()
-            .setAppId(appId)
-            .setHttpClient(app.getOption().getHttpClient())
-            .build();
-    }
-
-    static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -139,13 +127,13 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
      * @param validateOnly A boolean indicating whether to send message for test or not.
      * @param accessToken  A String for oauth
      * @return {@link SendResponse}
-     * @throws IOException If an error occurs when sending request
+     * @throws IOException If a error occurs when sending request
      */
     private SendResponse sendRequest(Message message, boolean validateOnly, String accessToken) throws IOException, HuaweiMesssagingException {
         Map<String, Object> map = createRequestMap(message, validateOnly);
         HttpPost httpPost = new HttpPost(this.HcmPushUrl);
         StringEntity entity = new StringEntity(JSON.toJSONString(map), "UTF-8");
-        /* String aqa = JSON.toJSONString(map); */
+        // String aqa = JSON.toJSONString(map);
         httpPost.setHeader("Authorization", "Bearer " + accessToken);
         httpPost.setHeader("Content-Type", "application/json;charset=utf-8");
         httpPost.setEntity(entity);
@@ -187,6 +175,18 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     private HuaweiMesssagingException createExceptionFromResponse(HttpResponseException e) {
         String msg = MessageFormat.format("Unexpected HTTP response with status : {0}, body : {1}", e.getStatusCode(), e.getMessage());
         return new HuaweiMesssagingException(HuaweiMessaging.UNKNOWN_ERROR, msg, e);
+    }
+
+    static HuaweiMessageClientImpl fromApp(HuaweiApp app) {
+        String appId = ImplHuaweiTrampolines.getAppId(app);
+        return HuaweiMessageClientImpl.builder()
+            .setAppId(appId)
+            .setHttpClient(app.getOption().getHttpClient())
+            .build();
+    }
+
+    static Builder builder() {
+        return new Builder();
     }
 
     static final class Builder {

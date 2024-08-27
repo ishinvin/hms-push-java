@@ -16,37 +16,23 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.webpush.WebHmsOptions;
 import io.github.ishinvin.push.webpush.WebNotification;
 import io.github.ishinvin.push.webpush.WebpushHeaders;
 
 public class WebPushConfig {
     @JSONField(name = "headers")
-    private final WebpushHeaders headers;
+    private WebpushHeaders headers;
 
     @JSONField(name = "data")
-    private final String data;
-    
+    private String data;
+
     @JSONField(name = "notification")
-    private final WebNotification notification;
+    private WebNotification notification;
 
     @JSONField(name = "hms_options")
-    private final WebHmsOptions webHmsOptions;
-
-    public WebPushConfig(Builder builder) {
-        this.headers = builder.headers;
-        this.data = builder.data;
-        this.notification = builder.notification;
-        this.webHmsOptions = builder.webHmsOptions;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    private WebHmsOptions webHmsOptions;
 
     public WebpushHeaders getHeaders() {
         return headers;
@@ -64,6 +50,13 @@ public class WebPushConfig {
         return webHmsOptions;
     }
 
+    public WebPushConfig(Builder builder) {
+        this.headers = builder.headers;
+        this.data = builder.data;
+        this.notification = builder.notification;
+        this.webHmsOptions = builder.webHmsOptions;
+    }
+
     public void check() {
         if (this.headers != null) {
             this.headers.check();
@@ -74,6 +67,13 @@ public class WebPushConfig {
         if (this.webHmsOptions != null) {
             this.webHmsOptions.check();
         }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

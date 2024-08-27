@@ -16,11 +16,15 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 
 public class TokenMessage {
     @JSONField(name = "token")
-    private final String token;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
 
     public TokenMessage(Builder builder) {
         this.token = builder.token;
@@ -28,13 +32,11 @@ public class TokenMessage {
 
     /**
      * builder
+     *
+     * @return
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public static class Builder {

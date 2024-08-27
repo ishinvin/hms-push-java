@@ -16,35 +16,31 @@
 
 package io.github.ishinvin.push.android;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class Color {
+    private final float zero = -0.000001f;
+
+    private final float one = 1.000001f;
 
     @JSONField(name = "alpha")
-    private final Float alpha;
+    private Float alpha;
 
     @JSONField(name = "red")
-    private final Float red;
+    private Float red;
 
     @JSONField(name = "green")
-    private final Float green;
+    private Float green;
 
     @JSONField(name = "blue")
-    private final Float blue;
+    private Float blue;
 
     public Color(Builder builder) {
         this.alpha = builder.alpha;
         this.red = builder.red;
         this.green = builder.green;
         this.blue = builder.blue;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     public double getAlpha() {
@@ -64,12 +60,17 @@ public class Color {
     }
 
     public void check() {
-        float zero = -0.000001f;
-        float one = 1.000001f;
         ValidatorUtils.checkArgument(this.alpha > zero && this.alpha < one, "Alpha shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.red > zero && this.red < one, "Red shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.green > zero && this.green < one, "Green shoube locate between [0,1]");
         ValidatorUtils.checkArgument(this.blue > zero && this.blue < one, "Blue shoube locate between [0,1]");
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.apns.ApnsHeaders;
 import io.github.ishinvin.push.apns.ApnsHmsOptions;
 import io.github.ishinvin.push.apns.Aps;
@@ -26,35 +26,13 @@ import java.util.Map;
 
 public class ApnsConfig {
     @JSONField(name = "hms_options")
-    private final ApnsHmsOptions hmsOptions;
+    private ApnsHmsOptions hmsOptions;
 
     @JSONField(name = "headers")
-    private final ApnsHeaders apnsHeaders;
+    private ApnsHeaders apnsHeaders;
 
     @JSONField(name = "payload")
     private Map<String, Object> payload = new HashMap<>();
-
-    public ApnsConfig(Builder builder) {
-        this.hmsOptions = builder.hmsOptions;
-        this.apnsHeaders = builder.apnsHeaders;
-        if (!CollectionUtils.isEmpty(builder.payload) || builder.aps != null) {
-            if (!CollectionUtils.isEmpty(builder.payload)) {
-                this.payload.putAll(builder.payload);
-            }
-            if (builder.aps != null) {
-                this.payload.put("aps", builder.aps);
-            }
-        } else {
-            this.payload = null;
-        }
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
 
     public void check() {
         if (this.hmsOptions != null) {
@@ -71,6 +49,21 @@ public class ApnsConfig {
         }
     }
 
+    public ApnsConfig(Builder builder) {
+        this.hmsOptions = builder.hmsOptions;
+        this.apnsHeaders = builder.apnsHeaders;
+        if (!CollectionUtils.isEmpty(builder.payload) || builder.aps != null) {
+            if (!CollectionUtils.isEmpty(builder.payload)) {
+                this.payload.putAll(builder.payload);
+            }
+            if (builder.aps != null) {
+                this.payload.put("aps", builder.aps);
+            }
+        } else {
+            this.payload = null;
+        }
+    }
+
     public ApnsHmsOptions getHmsOptions() {
         return hmsOptions;
     }
@@ -83,9 +76,16 @@ public class ApnsConfig {
         return apnsHeaders;
     }
 
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
-        private final Map<String, Object> payload = new HashMap<>();
         private ApnsHmsOptions hmsOptions;
+        private Map<String, Object> payload = new HashMap<>();
         private ApnsHeaders apnsHeaders;
         private Aps aps;
 

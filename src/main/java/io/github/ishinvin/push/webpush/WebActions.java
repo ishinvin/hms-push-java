@@ -16,30 +16,17 @@
 
 package io.github.ishinvin.push.webpush;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 
 public class WebActions {
     @JSONField(name = "action")
-    private final String action;
+    private String action;
 
     @JSONField(name = "icon")
-    private final String icon;
+    private String icon;
 
     @JSONField(name = "title")
-    private final String title;
-    
-    public WebActions(Builder builder) {
-        this.action = builder.action;
-        this.icon = builder.icon;
-        this.title = builder.title;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    private String title;
 
     public String getAction() {
         return action;
@@ -55,6 +42,19 @@ public class WebActions {
 
     public void check() {
 
+    }
+
+    public WebActions(Builder builder) {
+        this.action = builder.action;
+        this.icon = builder.icon;
+        this.title = builder.title;
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

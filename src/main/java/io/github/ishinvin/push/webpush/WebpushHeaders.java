@@ -16,36 +16,23 @@
 
 package io.github.ishinvin.push.webpush;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.Arrays;
 
 public class WebpushHeaders {
-    private static final String TTL_PATTERN = "[0-9]+|[0-9]+[sS]";
+    private static String TTL_PATTERN = "[0-9]+|[0-9]+[sS]";
 
-    private static final String[] URGENCY_VALUE = {"very-low", "low", "normal", "high"};
+    private static String[] URGENCY_VALUE = {"very-low", "low", "normal", "high"};
 
     @JSONField(name = "ttl")
-    private final String ttl;
+    private String ttl;
 
     @JSONField(name = "topic")
-    private final String topic;
+    private String topic;
 
     @JSONField(name = "urgency")
-    private final String urgency;
-
-    public WebpushHeaders(Builder builder) {
-        this.ttl = builder.ttl;
-        this.topic = builder.topic;
-        this.urgency = builder.urgency;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    private String urgency;
 
     public String getTtl() {
         return ttl;
@@ -59,13 +46,26 @@ public class WebpushHeaders {
         return urgency;
     }
 
+    public WebpushHeaders(Builder builder) {
+        this.ttl = builder.ttl;
+        this.topic = builder.topic;
+        this.urgency = builder.urgency;
+    }
+
     public void check() {
         if (this.ttl != null) {
             ValidatorUtils.checkArgument(this.ttl.matches(TTL_PATTERN), "Invalid ttl format");
         }
         if (this.urgency != null) {
-            ValidatorUtils.checkArgument(Arrays.asList(URGENCY_VALUE).contains(urgency), "Invalid urgency");
+            ValidatorUtils.checkArgument(Arrays.stream(URGENCY_VALUE).anyMatch(value -> value.equals(urgency)), "Invalid urgency");
         }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

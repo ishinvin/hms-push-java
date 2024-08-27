@@ -26,7 +26,7 @@ public class ValidatorUtils {
             throw new IllegalArgumentException();
         }
     }
-    
+
     public static void checkArgument(boolean expression, Object errorMessage) {
         if (!expression) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));

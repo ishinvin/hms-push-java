@@ -4,7 +4,7 @@
 
 package io.github.ishinvin.push.android;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,34 +16,19 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Button {
     @JSONField(name = "name")
-    private final String name;
+    private String name;
 
     @JSONField(name = "action_type")
-    private final Integer actionType;
+    private Integer actionType;
 
     @JSONField(name = "intent_type")
-    private final Integer intentType;
+    private Integer intentType;
 
     @JSONField(name = "intent")
-    private final String intent;
+    private String intent;
 
     @JSONField(name = "data")
-    private final String data;
-
-    public Button(Builder builder) {
-        this.name = builder.name;
-        this.actionType = builder.actionType;
-        this.intentType = builder.intentType;
-        this.intent = builder.intent;
-        this.data = builder.data;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    private String data;
 
     public String getName() {
         return name;
@@ -65,10 +50,26 @@ public class Button {
         return data;
     }
 
+
+    public Button(Builder builder) {
+        this.name = builder.name;
+        this.actionType = builder.actionType;
+        this.intentType = builder.intentType;
+        this.intent = builder.intent;
+        this.data = builder.data;
+    }
+
     public void check() {
         if (this.actionType != null && this.actionType == 4) {
             ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.data), "data is needed when actionType is 4");
         }
+    }
+
+    /**
+     * builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

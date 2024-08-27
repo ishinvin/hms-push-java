@@ -23,15 +23,11 @@ public class SendResponse {
     private final String code;
     private final String msg;
     private final String requestId;
-
+    
     protected SendResponse(String coede, String msg, String requestId) {
         this.code = coede;
         this.msg = msg;
         this.requestId = requestId;
-    }
-
-    public static SendResponse fromCode(String coede, String msg, String requestId) {
-        return new SendResponse(coede, msg, requestId);
     }
 
     public String getCode() {
@@ -44,5 +40,9 @@ public class SendResponse {
 
     public String getRequestId() {
         return requestId;
+    }
+
+    public static SendResponse fromCode(String coede, String msg, String requestId) {
+        return new SendResponse(coede, msg, requestId);
     }
 }

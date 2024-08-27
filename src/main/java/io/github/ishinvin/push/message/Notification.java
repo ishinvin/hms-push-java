@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.message;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.Locale;
 
@@ -50,13 +50,6 @@ public class Notification {
         this.image = builder.image;
     }
 
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public void check() {
         if (this.image != null) {
             ValidatorUtils.checkArgument(this.image.toLowerCase(Locale.getDefault()).trim().startsWith("https"),
@@ -86,6 +79,15 @@ public class Notification {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    /**
+     * builder
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

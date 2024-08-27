@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.apns;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class ApnsHmsOptions {
@@ -25,10 +25,23 @@ public class ApnsHmsOptions {
     private static final int VOIP_USER = 3;
 
     @JSONField(name = "target_user_type")
-    private final Integer targetUserType;
+    private Integer targetUserType;
+
+    public Integer getTargetUserType() {
+        return targetUserType;
+    }
 
     private ApnsHmsOptions(Builder builder) {
         this.targetUserType = builder.targetUserType;
+    }
+
+    public void check() {
+        if (targetUserType != null) {
+            ValidatorUtils.checkArgument(this.targetUserType.intValue() == TEST_USER
+                    || this.targetUserType.intValue() == FORMAL_USER
+                    || this.targetUserType.intValue() == VOIP_USER,
+                "targetUserType should be [TEST_USER: 1, FORMAL_USER: 2, VOIP_USER: 3]");
+        }
     }
 
     /**
@@ -36,19 +49,6 @@ public class ApnsHmsOptions {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    public Integer getTargetUserType() {
-        return targetUserType;
-    }
-
-    public void check() {
-        if (targetUserType != null) {
-            ValidatorUtils.checkArgument(this.targetUserType == TEST_USER
-                    || this.targetUserType == FORMAL_USER
-                    || this.targetUserType == VOIP_USER,
-                "targetUserType should be [TEST_USER: 1, FORMAL_USER: 2, VOIP_USER: 3]");
-        }
     }
 
     public static class Builder {

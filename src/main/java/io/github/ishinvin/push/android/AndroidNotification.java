@@ -16,8 +16,8 @@
 
 package io.github.ishinvin.push.android;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.message.Notification;
 import io.github.ishinvin.push.model.Importance;
 import io.github.ishinvin.push.model.Visibility;
@@ -38,87 +38,115 @@ public class AndroidNotification {
     private static final String VIBRATE_PATTERN = "[0-9]+|[0-9]+[sS]|[0-9]+[.][0-9]{1,9}|[0-9]+[.][0-9]{1,9}[sS]";
 
     @JSONField(name = "title")
-    private final String title;
+    private String title;
 
     @JSONField(name = "body")
-    private final String body;
+    private String body;
 
     @JSONField(name = "icon")
-    private final String icon;
+    private String icon;
 
     @JSONField(name = "color")
-    private final String color;
+    private String color;
 
     @JSONField(name = "sound")
-    private final String sound;
+    private String sound;
 
     @JSONField(name = "default_sound")
-    private final boolean defaultSound;
+    private boolean defaultSound;
 
     @JSONField(name = "tag")
-    private final String tag;
+    private String tag;
 
     @JSONField(name = "click_action")
-    private final ClickAction clickAction;
+    private ClickAction clickAction;
 
     @JSONField(name = "body_loc_key")
-    private final String bodyLocKey;
-    @JSONField(name = "title_loc_key")
-    private final String titleLocKey;
-    @JSONField(name = "multi_lang_key")
-    private final JSONObject multiLangKey;
-    @JSONField(name = "channel_id")
-    private final String channelId;
-    @JSONField(name = "notify_summary")
-    private final String notifySummary;
-    @JSONField(name = "image")
-    private final String image;
-    @JSONField(name = "style")
-    private final Integer style;
-    @JSONField(name = "big_title")
-    private final String bigTitle;
-    @JSONField(name = "big_body")
-    private final String bigBody;
-    @JSONField(name = "auto_clear")
-    private final Integer autoClear;
-    @JSONField(name = "notify_id")
-    private final Integer notifyId;
-    @JSONField(name = "group")
-    private final String group;
-    @JSONField(name = "badge")
-    private final BadgeNotification badge;
-    @JSONField(name = "ticker")
-    private final String ticker;
-    @JSONField(name = "auto_cancel")
-    private final boolean autoCancel;
-    @JSONField(name = "when")
-    private final String when;
-    @JSONField(name = "importance")
-    private final String importance;
-    @JSONField(name = "use_default_vibrate")
-    private final boolean useDefaultVibrate;
-    @JSONField(name = "use_default_light")
-    private final boolean useDefaultLight;
-    @JSONField(name = "visibility")
-    private final String visibility;
-    @JSONField(name = "light_settings")
-    private final LightSettings lightSettings;
-    @JSONField(name = "foreground_show")
-    private final boolean foregroundShow;
-    @JSONField(name = "inbox_content")
-    private final List<String> inboxContent;
-    @JSONField(name = "buttons")
-    private final List<Button> buttons;
-    @JSONField(name = "profile_id")
-    private final String profileId;
+    private String bodyLocKey;
+
     @JSONField(name = "body_loc_args")
     private List<String> bodyLocArgs = new ArrayList<>();
+
+    @JSONField(name = "title_loc_key")
+    private String titleLocKey;
+
     @JSONField(name = "title_loc_args")
     private List<String> titleLocArgs = new ArrayList<>();
+
+    @JSONField(name = "multi_lang_key")
+    private JSONObject multiLangKey;
+
+    @JSONField(name = "channel_id")
+    private String channelId;
+
+    @JSONField(name = "notify_summary")
+    private String notifySummary;
+
+    @JSONField(name = "image")
+    private String image;
+
+    @JSONField(name = "style")
+    private Integer style;
+
+    @JSONField(name = "big_title")
+    private String bigTitle;
+
+    @JSONField(name = "big_body")
+    private String bigBody;
+
+    @JSONField(name = "auto_clear")
+    private Integer autoClear;
+
+    @JSONField(name = "notify_id")
+    private Integer notifyId;
+
+    @JSONField(name = "group")
+    private String group;
+
+    @JSONField(name = "badge")
+    private BadgeNotification badge;
+
+    @JSONField(name = "ticker")
+    private String ticker;
+
+    @JSONField(name = "auto_cancel")
+    private boolean autoCancel;
+
+    @JSONField(name = "when")
+    private String when;
+
     @JSONField(name = "local_only")
     private Boolean localOnly;
+
+    @JSONField(name = "importance")
+    private String importance;
+
+    @JSONField(name = "use_default_vibrate")
+    private boolean useDefaultVibrate;
+
+    @JSONField(name = "use_default_light")
+    private boolean useDefaultLight;
+
     @JSONField(name = "vibrate_config")
     private List<String> vibrateConfig = new ArrayList<>();
+
+    @JSONField(name = "visibility")
+    private String visibility;
+
+    @JSONField(name = "light_settings")
+    private LightSettings lightSettings;
+
+    @JSONField(name = "foreground_show")
+    private boolean foregroundShow;
+
+    @JSONField(name = "inbox_content")
+    private List<String> inboxContent;
+
+    @JSONField(name = "buttons")
+    private List<Button> buttons;
+
+    @JSONField(name = "profile_id")
+    private String profileId;
 
     private AndroidNotification(Builder builder) {
         this.title = builder.title;
@@ -200,13 +228,6 @@ public class AndroidNotification {
     }
 
     /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
      * check androidNotification's parameters
      *
      * @param notification which is in message
@@ -256,7 +277,7 @@ public class AndroidNotification {
         }
 
         if (this.autoClear != null) {
-            ValidatorUtils.checkArgument(this.autoClear > 0, "auto clear should positive value");
+            ValidatorUtils.checkArgument(this.autoClear.intValue() > 0, "auto clear should positive value");
         }
 
         if (badge != null) {
@@ -275,7 +296,7 @@ public class AndroidNotification {
             for (String vibrateTiming : this.vibrateConfig) {
                 ValidatorUtils.checkArgument(vibrateTiming.matches(AndroidNotification.VIBRATE_PATTERN), "Wrong vibrate timing format");
                 long vibrateTimingValue = (long) (1000 * Double
-                    .parseDouble(StringUtils.substringBefore(vibrateTiming.toLowerCase(Locale.getDefault()), "s")));
+                    .valueOf(StringUtils.substringBefore(vibrateTiming.toLowerCase(Locale.getDefault()), "s")));
                 ValidatorUtils.checkArgument(vibrateTimingValue > 0 && vibrateTimingValue < 60000,
                     "Vibrate timing duration must be greater than 0 and less than 60s");
             }
@@ -469,13 +490,17 @@ public class AndroidNotification {
         return profileId;
     }
 
+    /**
+     * builder
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
 
-        private final List<String> bodyLocArgs = new ArrayList<>();
-        private final List<String> titleLocArgs = new ArrayList<>();
-        private final List<String> vibrateConfig = new ArrayList<>();
-        private final List<String> inboxContent = new ArrayList<>();
-        private final List<Button> buttons = new ArrayList<Button>();
         private String title;
         private String body;
         private String icon;
@@ -485,7 +510,9 @@ public class AndroidNotification {
         private String tag;
         private ClickAction clickAction;
         private String bodyLocKey;
+        private List<String> bodyLocArgs = new ArrayList<>();
         private String titleLocKey;
+        private List<String> titleLocArgs = new ArrayList<>();
         private JSONObject multiLangkey;
         private String channelId;
         private String notifySummary;
@@ -496,16 +523,23 @@ public class AndroidNotification {
         private Integer autoClear;
         private Integer notifyId;
         private String group;
+
         private BadgeNotification badge;
+
         private String ticker;
         private boolean autoCancel = true;
         private String when;
         private String importance;
         private boolean useDefaultVibrate;
         private boolean useDefaultLight;
+        private List<String> vibrateConfig = new ArrayList<>();
         private String visibility;
         private LightSettings lightSettings;
         private boolean foregroundShow;
+
+        private List<String> inboxContent = new ArrayList<>();
+        private List<Button> buttons = new ArrayList<Button>();
+
         private String profileId;
 
         private Builder() {

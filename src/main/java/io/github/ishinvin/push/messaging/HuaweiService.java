@@ -21,7 +21,7 @@ package io.github.ishinvin.push.messaging;
  * Each instance of the class is associated with one instance of the HuaweiApp
  */
 public abstract class HuaweiService<T> {
-    private final String id;
+    private String id;
     protected T instance;
 
     protected HuaweiService(String id, T instance) {

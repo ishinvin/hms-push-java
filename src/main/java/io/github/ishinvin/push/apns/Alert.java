@@ -16,7 +16,7 @@
 
 package io.github.ishinvin.push.apns;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.CollectionUtils;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.util.ArrayList;
@@ -25,49 +25,28 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Alert {
     @JSONField(name = "title")
-    private final String title;
+    private String title;
 
     @JSONField(name = "body")
-    private final String body;
+    private String body;
 
     @JSONField(name = "title-loc-key")
-    private final String titleLocKey;
-    @JSONField(name = "action-loc-key")
-    private final String actionLocKey;
-    @JSONField(name = "loc-key")
-    private final String locKey;
-    @JSONField(name = "launch-image")
-    private final String launchImage;
+    private String titleLocKey;
+
     @JSONField(name = "title-loc-args")
     private List<String> titleLocArgs = new ArrayList<String>();
+
+    @JSONField(name = "action-loc-key")
+    private String actionLocKey;
+
+    @JSONField(name = "loc-key")
+    private String locKey;
+
     @JSONField(name = "loc-args")
     private List<String> locArgs = new ArrayList<String>();
 
-    private Alert(Builder builder) {
-        this.title = builder.title;
-        this.body = builder.body;
-        this.titleLocKey = builder.titleLocKey;
-        if (!CollectionUtils.isEmpty(builder.titleLocArgs)) {
-            this.titleLocArgs.addAll(builder.titleLocArgs);
-        } else {
-            this.titleLocArgs = null;
-        }
-        this.actionLocKey = builder.actionLocKey;
-        this.locKey = builder.locKey;
-        if (!CollectionUtils.isEmpty(builder.locArgs)) {
-            this.locArgs.addAll(builder.locArgs);
-        } else {
-            this.locArgs = null;
-        }
-        this.launchImage = builder.launchImage;
-    }
-
-    /**
-     * builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    @JSONField(name = "launch-image")
+    private String launchImage;
 
     public String getTitle() {
         return title;
@@ -101,6 +80,25 @@ public class Alert {
         return launchImage;
     }
 
+    private Alert(Builder builder) {
+        this.title = builder.title;
+        this.body = builder.body;
+        this.titleLocKey = builder.titleLocKey;
+        if (!CollectionUtils.isEmpty(builder.titleLocArgs)) {
+            this.titleLocArgs.addAll(builder.titleLocArgs);
+        } else {
+            this.titleLocArgs = null;
+        }
+        this.actionLocKey = builder.actionLocKey;
+        this.locKey = builder.locKey;
+        if (!CollectionUtils.isEmpty(builder.locArgs)) {
+            this.locArgs.addAll(builder.locArgs);
+        } else {
+            this.locArgs = null;
+        }
+        this.launchImage = builder.launchImage;
+    }
+
     public void check() {
         if (!CollectionUtils.isEmpty(this.locArgs)) {
             ValidatorUtils.checkArgument(StringUtils.isNotEmpty(this.locKey), "locKey is required when specifying locArgs");
@@ -110,14 +108,23 @@ public class Alert {
         }
     }
 
+    /**
+     * builder
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
-        private final List<String> titleLocArgs = new ArrayList<String>();
-        private final List<String> locArgs = new ArrayList<String>();
         private String title;
         private String body;
         private String titleLocKey;
+        private List<String> titleLocArgs = new ArrayList<String>();
         private String actionLocKey;
         private String locKey;
+        private List<String> locArgs = new ArrayList<String>();
         private String launchImage;
 
         public Builder setTitle(String title) {

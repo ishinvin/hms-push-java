@@ -16,40 +16,27 @@
 
 package io.github.ishinvin.push.apns;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.ishinvin.push.util.ValidatorUtils;
 
 public class Aps {
     @JSONField(name = "alert")
-    private final Object alert;
+    private Object alert;
 
     @JSONField(name = "badge")
-    private final Integer badge;
+    private Integer badge;
 
     @JSONField(name = "sound")
-    private final String sound;
+    private String sound;
 
     @JSONField(name = "content-available")
-    private final Integer contentAvailable;
+    private Integer contentAvailable;
 
     @JSONField(name = "category")
-    private final String category;
+    private String category;
 
     @JSONField(name = "thread-id")
-    private final String threadId;
-
-    private Aps(Builder builder) {
-        this.alert = builder.alert;
-        this.badge = builder.badge;
-        this.sound = builder.sound;
-        this.contentAvailable = builder.contentAvailable;
-        this.category = builder.category;
-        this.threadId = builder.threadId;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
+    private String threadId;
 
     public Object getAlert() {
         return alert;
@@ -83,6 +70,19 @@ public class Aps {
                 ValidatorUtils.checkArgument((this.alert instanceof String), "Alter should be Dictionary or String");
             }
         }
+    }
+
+    private Aps(Builder builder) {
+        this.alert = builder.alert;
+        this.badge = builder.badge;
+        this.sound = builder.sound;
+        this.contentAvailable = builder.contentAvailable;
+        this.category = builder.category;
+        this.threadId = builder.threadId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {

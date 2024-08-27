@@ -21,10 +21,10 @@ public enum Visibility {
     PRIVATE("PRIVATE"),
     PUBLIC("PUBLIC"),
     SECRET("SECRET");
-    
-    private final String value;
 
-    Visibility(String value) {
+    private String value;
+
+    private Visibility(String value) {
         this.value = value;
     }
 
