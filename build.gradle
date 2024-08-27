@@ -3,10 +3,11 @@ plugins {
     id 'maven-publish'
     id 'checkstyle'
     id 'signing'
+    id 'net.thebugmc.gradle.sonatype-central-portal-publisher' version '1.2.4'
 }
 
-group = 'io.github.ishinvin.push'
-version = System.getenv("GITHUB_RELEASE_VERSION") ?: "0.0.1-SNAPSHOT"
+group = 'io.github.ishinvin'
+version = '1.0.0'
 description = 'hms-push-java'
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -28,46 +29,33 @@ checkstyle {
     toolVersion = "10.16.0"
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            pom {
-                name = 'HMS Push Java'
-                description = 'push notification with HMS Push Kit'
-                url = 'https://github.com/ishinvin/hms-push-java'
-
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'io.github.ishinvin'
-                        name = 'Ishin Vin'
-                        email = 'ishinvin26@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "OSSRH"
-            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
-            }
-        }
-    }
-}
-
 signing {
-    useGpgCmd()
-    sign publishing.publications.mavenJava
+    sign publishing.publications
 }
+
+centralPortal {
+    username = centralUsername
+    password = centralPassword
+    pom {
+        url = 'https://github.com/ishinvin/hms-push-java'
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+        }
+        developers {
+            developer {
+                name = 'Ishin Vin'
+                email = 'ishinvin26@gmail.com'
+            }
+        }
+        scm {
+            connection = 'scm:git:git://github.com/ishinvin/hms-push-java.git'
+            developerConnection = 'scm:git:ssh://github.com:ishinvin/hms-push-java.git'
+            url = 'https://github.com/ishinvin/hms-push-java'
+        }
+
+    }
+}
+
