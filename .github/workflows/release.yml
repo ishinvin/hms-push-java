@@ -26,7 +26,7 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
-          echo "$SIGNING_KEY" | base64 --decode | gpg --import --batch --yes
+          echo "$SIGNING_KEY" | gpg --import --batch --yes
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
