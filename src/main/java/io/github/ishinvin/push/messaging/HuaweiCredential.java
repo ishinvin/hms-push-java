@@ -17,9 +17,9 @@
 package io.github.ishinvin.push.messaging;
 
 import com.alibaba.fastjson.JSONObject;
+import io.github.ishinvin.push.util.Constants;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ResourceBundle;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -37,9 +37,6 @@ import org.slf4j.LoggerFactory;
  */
 public class HuaweiCredential {
     private static final Logger logger = LoggerFactory.getLogger(HuaweiCredential.class);
-
-    private final String PUSH_AT_URL = ResourceBundle.getBundle("url").getString("token_server");
-
     private final String appId;
     private final String appSecret;
     private final Lock lock;
@@ -79,7 +76,7 @@ public class HuaweiCredential {
     private void executeRefresh() throws IOException {
         String requestBody = createRequestBody(appId, appSecret);
 
-        HttpPost httpPost = new HttpPost(PUSH_AT_URL);
+        HttpPost httpPost = new HttpPost(Constants.TOKEN_SERVER_URL);
         StringEntity entity = new StringEntity(requestBody);
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
         httpPost.setEntity(entity);

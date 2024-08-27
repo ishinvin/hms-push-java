@@ -26,12 +26,12 @@ import io.github.ishinvin.push.model.TopicOperation;
 import io.github.ishinvin.push.reponse.SendResponse;
 import io.github.ishinvin.push.reponse.TopicListResponse;
 import io.github.ishinvin.push.reponse.TopicSendResponse;
+import io.github.ishinvin.push.util.Constants;
 import io.github.ishinvin.push.util.ValidatorUtils;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -41,8 +41,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 public class HuaweiMessageClientImpl implements HuaweiMessageClient {
-    private static final String PUSH_URL = ResourceBundle.getBundle("url").getString("push_open_url");
-
     private final String HcmPushUrl;
     private final CloseableHttpClient httpClient;
     private String hcmTopicUrl;
@@ -50,8 +48,8 @@ public class HuaweiMessageClientImpl implements HuaweiMessageClient {
     private String hcmTokenUrl;
 
     private HuaweiMessageClientImpl(Builder builder) {
-        this.HcmPushUrl = MessageFormat.format(PUSH_URL + "/v1/{0}/messages:send", builder.appId);
-        this.hcmTopicUrl = MessageFormat.format(PUSH_URL + "/v1/{0}/topic:{1}", builder.appId);
+        this.HcmPushUrl = MessageFormat.format(Constants.PUSH_URL + "/v1/{0}/messages:send", builder.appId);
+        this.hcmTopicUrl = MessageFormat.format(Constants.PUSH_URL + "/v1/{0}/topic:{1}", builder.appId);
 
         ValidatorUtils.checkArgument(builder.httpClient != null, "requestFactory must not be null");
         this.httpClient = builder.httpClient;
