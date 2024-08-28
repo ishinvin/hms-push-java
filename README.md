@@ -39,6 +39,14 @@ Set the following parameters.
 
 ## Sample Code
 
+#### Maven Central Repository
+
+repository: [hms-push-java](https://central.sonatype.com/artifact/io.github.ishinvin/hms-push-java)
+
+```.kts
+implementation("io.github.ishinvin:hms-push-java:1.0.1")
+```
+
 #### 1. Send an Android data message.
 Code location: [examples/SendDataMessage.java](doc/examples/SendDataMessage.java)
 
