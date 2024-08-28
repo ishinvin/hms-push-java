@@ -32,4 +32,9 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ env.RELEASE_VERSION }}
 
       - name: Publish package
-        run: ./mvnw --batch-mode deploy -DskipTests
+        run: |
+          ./mvnw \
+          --no-transfer-progress \
+          --batch-mode \
+          -Dgpg.passphrase=${{ secrets.GPG_SIGNING_KEY_PASSWORD }} \
+          clean deploy
