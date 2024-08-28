@@ -19,22 +19,17 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_SIGNING_KEY }}
-          passphrase: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+          server-id: central
+          server-username: ${{ secrets.OSSRH_USERNAME }}
+          server-password: ${{ secrets.OSSRH_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
 
       - name: List keys
         run: gpg -K
 
-      - name: Publish to Maven Central
-        run: ./mvnw --batch-mode deploy
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
-          GITHUB_RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+      - name: Set version
+        run: mvn versions:set -DnewVersion=${{ env.RELEASE_VERSION }}
 
+      - name: Publish package
+        run: ./mvnw --batch-mode deploy -DskipTests
